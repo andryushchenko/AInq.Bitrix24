@@ -1,5 +1,4 @@
-﻿using AInq.Background.Tasks;
-using AInq.Helpers.Polly;
+﻿using AInq.Helpers.Polly;
 using AInq.Optional;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -16,7 +15,7 @@ using System.Threading.Tasks;
 namespace AInq.Bitrix24
 {
 
-public abstract class B24Client : IB24Client, IThrottling, IConveyorMachine<(string Method, JToken? Data), JToken>, IDisposable
+public abstract class B24Client : IB24Client, IDisposable
 {
     private const string AuthPath = "https://oauth.bitrix.info/oauth/token/";
     private readonly HttpClient _client;
@@ -47,16 +46,8 @@ public abstract class B24Client : IB24Client, IThrottling, IConveyorMachine<(str
     Task<JToken> IB24Client.PostAsync(string method, JToken data, CancellationToken cancellation)
         => PostRequestAsync(method, data, cancellation);
 
-    Task<JToken> IConveyorMachine<(string Method, JToken? Data), JToken>.ProcessDataAsync((string Method, JToken? Data) data,
-        IServiceProvider provider, CancellationToken cancellation)
-        => data.Data == null
-            ? GetRequestAsync(data.Method, cancellation)
-            : PostRequestAsync(data.Method, data.Data, cancellation);
-
     void IDisposable.Dispose()
         => _client.Dispose();
-
-    TimeSpan IThrottling.Timeout => Timeout;
 
     protected async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)
     {
