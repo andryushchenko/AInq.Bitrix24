@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace AInq.Bitrix24
 {
 
-public interface IB24Client
+public interface IBitrix24Client
 {
     Task<JToken> GetAsync(string method, CancellationToken cancellation = default);
     Task<JToken> PostAsync(string method, JToken data, CancellationToken cancellation = default);

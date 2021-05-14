@@ -15,18 +15,18 @@ using System.Threading.Tasks;
 namespace AInq.Bitrix24
 {
 
-public abstract class B24Client : IB24Client, IDisposable
+public abstract class Bitrix24Client : IBitrix24Client, IDisposable
 {
     private const string AuthPath = "https://oauth.bitrix.info/oauth/token/";
     private readonly HttpClient _client;
     private readonly string _clientSecret;
     private readonly IAsyncPolicy<HttpResponseMessage> _policy;
     protected readonly string ClientId;
-    protected readonly ILogger<IB24Client> Logger;
+    protected readonly ILogger<IBitrix24Client> Logger;
     protected readonly string Portal;
     protected readonly TimeSpan Timeout;
 
-    protected B24Client(string portal, string clientId, string clientSecret, ILogger<IB24Client> logger, TimeSpan timeout)
+    protected Bitrix24Client(string portal, string clientId, string clientSecret, ILogger<IBitrix24Client> logger, TimeSpan timeout)
     {
         ClientId = string.IsNullOrWhiteSpace(clientId) ? throw new ArgumentOutOfRangeException(nameof(clientId)) : clientId;
         _clientSecret = string.IsNullOrWhiteSpace(clientSecret) ? throw new ArgumentOutOfRangeException(nameof(clientSecret)) : clientSecret;
@@ -40,10 +40,10 @@ public abstract class B24Client : IB24Client, IDisposable
                   .RetryAsync(async (_, _, ctx) => await AuthAsync(ctx.GetCancellationToken()).ConfigureAwait(false)));
     }
 
-    Task<JToken> IB24Client.GetAsync(string method, CancellationToken cancellation)
+    Task<JToken> IBitrix24Client.GetAsync(string method, CancellationToken cancellation)
         => GetRequestAsync(method, cancellation);
 
-    Task<JToken> IB24Client.PostAsync(string method, JToken data, CancellationToken cancellation)
+    Task<JToken> IBitrix24Client.PostAsync(string method, JToken data, CancellationToken cancellation)
         => PostRequestAsync(method, data, cancellation);
 
     void IDisposable.Dispose()
@@ -53,7 +53,11 @@ public abstract class B24Client : IB24Client, IDisposable
     {
         await InitAsync(cancellation).ConfigureAwait(false);
         using var result = await _policy.GetAsync(_client, method, Logger, cancellation).ConfigureAwait(false);
+#if NETSTANDARD
         return JToken.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+#else
+        return JToken.Parse(await result.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false));
+#endif
     }
 
     protected async Task<JToken> PostRequestAsync(string method, JToken data, CancellationToken cancellation = default)
@@ -61,7 +65,11 @@ public abstract class B24Client : IB24Client, IDisposable
         await InitAsync(cancellation).ConfigureAwait(false);
         using var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
         using var result = await _policy.PostAsync(_client, method, content, Logger, cancellation).ConfigureAwait(false);
+#if NET5_0
+        return JToken.Parse(await result.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false));
+#else
         return JToken.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+#endif
     }
 
     private async Task AuthAsync(CancellationToken cancellation)
@@ -74,7 +82,7 @@ public abstract class B24Client : IB24Client, IDisposable
 
     private async Task<bool> AuthorizeAsync(CancellationToken cancellation)
     {
-        var code = await GetAuthorizationCode().ConfigureAwait(false);
+        var code = await GetAuthorizationCode(cancellation).ConfigureAwait(false);
         if (string.IsNullOrWhiteSpace(code)) return false;
         using var content = new FormUrlEncodedContent(new[]
         {
@@ -87,7 +95,12 @@ public abstract class B24Client : IB24Client, IDisposable
                                                   .PostAsync(AuthPath, content, Logger, cancellation)
                                                   .ConfigureAwait(false);
         if (!result.IsSuccessStatusCode) return false;
-        await SetTokenAsync(await result.Content.ReadAsStringAsync().ConfigureAwait(false)).ConfigureAwait(false);
+#if NET5_0
+        var data = JToken.Parse(await result.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false));
+#else
+        var data = JToken.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+#endif
+        await SetTokenAsync(data).ConfigureAwait(false);
         return true;
     }
 
@@ -104,13 +117,17 @@ public abstract class B24Client : IB24Client, IDisposable
                                                   .PostAsync(AuthPath, content, Logger, cancellation)
                                                   .ConfigureAwait(false);
         if (!result.IsSuccessStatusCode) return false;
-        await SetTokenAsync(await result.Content.ReadAsStringAsync().ConfigureAwait(false)).ConfigureAwait(false);
+#if NET5_0
+        var data = JToken.Parse(await result.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false));
+#else
+        var data = JToken.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+#endif
+        await SetTokenAsync(data).ConfigureAwait(false);
         return true;
     }
 
-    private async ValueTask SetTokenAsync(string httpData)
+    private async ValueTask SetTokenAsync(JToken data)
     {
-        var data = JToken.Parse(httpData);
         var refresh = data.Value<string>("refresh_token")!;
         await StoreValue("b24_refresh", refresh).ConfigureAwait(false);
         var access = data.Value<string>("access_token")!;
@@ -129,7 +146,7 @@ public abstract class B24Client : IB24Client, IDisposable
         }
     }
 
-    protected abstract Task<string> GetAuthorizationCode();
+    protected abstract Task<string> GetAuthorizationCode(CancellationToken cancellation);
     protected abstract ValueTask<Maybe<string>> GetValue(string key);
     protected abstract ValueTask StoreValue(string key, string value);
     protected abstract ValueTask RemoveValue(string key);
