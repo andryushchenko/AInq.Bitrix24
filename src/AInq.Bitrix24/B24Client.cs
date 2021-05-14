@@ -20,23 +20,23 @@ public abstract class B24Client : IB24Client, IThrottling, IConveyorMachine<(str
 {
     private const string AuthPath = "https://oauth.bitrix.info/oauth/token/";
     private readonly HttpClient _client;
-    private readonly string _clientId;
     private readonly string _clientSecret;
-    private readonly ILogger<IB24Client> _logger;
     private readonly IAsyncPolicy<HttpResponseMessage> _policy;
-    private readonly string _portal;
-    private readonly TimeSpan _timeout;
+    protected readonly string ClientId;
+    protected readonly ILogger<IB24Client> Logger;
+    protected readonly string Portal;
+    protected readonly TimeSpan Timeout;
 
     protected B24Client(string portal, string clientId, string clientSecret, ILogger<IB24Client> logger, TimeSpan timeout)
     {
-        _clientId = string.IsNullOrWhiteSpace(clientId) ? throw new ArgumentOutOfRangeException(nameof(clientId)) : clientId;
+        ClientId = string.IsNullOrWhiteSpace(clientId) ? throw new ArgumentOutOfRangeException(nameof(clientId)) : clientId;
         _clientSecret = string.IsNullOrWhiteSpace(clientSecret) ? throw new ArgumentOutOfRangeException(nameof(clientSecret)) : clientSecret;
-        _portal = string.IsNullOrWhiteSpace(portal) ? throw new ArgumentOutOfRangeException(nameof(portal)) : portal;
-        _timeout = timeout > TimeSpan.Zero ? timeout : throw new ArgumentOutOfRangeException(nameof(timeout));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _client = new HttpClient {BaseAddress = new Uri($"https://{_portal}/rest/")};
+        Portal = string.IsNullOrWhiteSpace(portal) ? throw new ArgumentOutOfRangeException(nameof(portal)) : portal;
+        Timeout = timeout > TimeSpan.Zero ? timeout : throw new ArgumentOutOfRangeException(nameof(timeout));
+        Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _client = new HttpClient {BaseAddress = new Uri($"https://{Portal}/rest/")};
         _policy = Policy.WrapAsync(HttpRetryPolicies.TransientRetryAsyncPolicy(),
-            HttpRetryPolicies.TimeoutRetryAsyncPolicy(_timeout),
+            HttpRetryPolicies.TimeoutRetryAsyncPolicy(Timeout),
             Policy.HandleResult<HttpResponseMessage>(response => response.StatusCode == HttpStatusCode.Unauthorized)
                   .RetryAsync(async (_, _, ctx) => await AuthAsync(ctx.GetCancellationToken()).ConfigureAwait(false)));
     }
@@ -56,20 +56,20 @@ public abstract class B24Client : IB24Client, IThrottling, IConveyorMachine<(str
     void IDisposable.Dispose()
         => _client.Dispose();
 
-    TimeSpan IThrottling.Timeout => _timeout;
+    TimeSpan IThrottling.Timeout => Timeout;
 
-    private async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)
+    protected async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)
     {
         await InitAsync(cancellation).ConfigureAwait(false);
-        using var result = await _policy.GetAsync(_client, method, _logger, cancellation).ConfigureAwait(false);
+        using var result = await _policy.GetAsync(_client, method, Logger, cancellation).ConfigureAwait(false);
         return JToken.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
     }
 
-    private async Task<JToken> PostRequestAsync(string method, JToken data, CancellationToken cancellation = default)
+    protected async Task<JToken> PostRequestAsync(string method, JToken data, CancellationToken cancellation = default)
     {
         await InitAsync(cancellation).ConfigureAwait(false);
         using var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
-        using var result = await _policy.PostAsync(_client, method, content, _logger, cancellation).ConfigureAwait(false);
+        using var result = await _policy.PostAsync(_client, method, content, Logger, cancellation).ConfigureAwait(false);
         return JToken.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
     }
 
@@ -83,17 +83,17 @@ public abstract class B24Client : IB24Client, IThrottling, IConveyorMachine<(str
 
     private async Task<bool> AuthorizeAsync(CancellationToken cancellation)
     {
-        var code = await GetAuthorizationCode(_portal, _clientId).ConfigureAwait(false);
+        var code = await GetAuthorizationCode().ConfigureAwait(false);
         if (string.IsNullOrWhiteSpace(code)) return false;
         using var content = new FormUrlEncodedContent(new[]
         {
             new KeyValuePair<string?, string?>("grant_type", "authorization_code"),
-            new KeyValuePair<string?, string?>("client_id", _clientId),
+            new KeyValuePair<string?, string?>("client_id", ClientId),
             new KeyValuePair<string?, string?>("client_secret", _clientSecret),
             new KeyValuePair<string?, string?>("code", code)
         });
         using var result = await HttpRetryPolicies.TransientRetryAsyncPolicy()
-                                                  .PostAsync(AuthPath, content, _logger, cancellation)
+                                                  .PostAsync(AuthPath, content, Logger, cancellation)
                                                   .ConfigureAwait(false);
         if (!result.IsSuccessStatusCode) return false;
         await SetTokenAsync(await result.Content.ReadAsStringAsync().ConfigureAwait(false)).ConfigureAwait(false);
@@ -105,12 +105,12 @@ public abstract class B24Client : IB24Client, IThrottling, IConveyorMachine<(str
         using var content = new FormUrlEncodedContent(new[]
         {
             new KeyValuePair<string?, string?>("grant_type", "refresh_token"),
-            new KeyValuePair<string?, string?>("client_id", _clientId),
+            new KeyValuePair<string?, string?>("client_id", ClientId),
             new KeyValuePair<string?, string?>("client_secret", _clientSecret),
             new KeyValuePair<string?, string?>("refresh_token", refreshToken)
         });
         using var result = await HttpRetryPolicies.TransientRetryAsyncPolicy()
-                                                  .PostAsync(AuthPath, content, _logger, cancellation)
+                                                  .PostAsync(AuthPath, content, Logger, cancellation)
                                                   .ConfigureAwait(false);
         if (!result.IsSuccessStatusCode) return false;
         await SetTokenAsync(await result.Content.ReadAsStringAsync().ConfigureAwait(false)).ConfigureAwait(false);
@@ -138,7 +138,7 @@ public abstract class B24Client : IB24Client, IThrottling, IConveyorMachine<(str
         }
     }
 
-    protected abstract Task<string> GetAuthorizationCode(string portal, string clientId);
+    protected abstract Task<string> GetAuthorizationCode();
     protected abstract ValueTask<Maybe<string>> GetValue(string key);
     protected abstract ValueTask StoreValue(string key, string value);
     protected abstract ValueTask RemoveValue(string key);
