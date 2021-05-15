@@ -19,9 +19,18 @@ using System.Threading.Tasks;
 namespace AInq.Bitrix24
 {
 
+/// <summary> Bitrix24 REST API client interface </summary>
 public interface IBitrix24Client
 {
+    /// <summary> Call GET method </summary>
+    /// <param name="method"> REST method name</param>
+    /// <param name="cancellation"> Cancellation token </param>
     Task<JToken> GetAsync(string method, CancellationToken cancellation = default);
+
+    /// <summary> Call POST method </summary>
+    /// <param name="method"> REST method name</param>
+    /// <param name="data"> Call data </param>
+    /// <param name="cancellation"> Cancellation token </param>
     Task<JToken> PostAsync(string method, JToken data, CancellationToken cancellation = default);
 }
 

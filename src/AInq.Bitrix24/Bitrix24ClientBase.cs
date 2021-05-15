@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using AInq.Helpers.Polly;
-using AInq.Optional;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using Polly;
@@ -29,18 +28,32 @@ using System.Threading.Tasks;
 namespace AInq.Bitrix24
 {
 
-public abstract class Bitrix24Client : IBitrix24Client, IDisposable
+/// <summary> Bitrix24 REST API client base </summary>
+public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
 {
     private const string AuthPath = "https://oauth.bitrix.info/oauth/token/";
     private readonly HttpClient _client;
     private readonly string _clientSecret;
     private readonly IAsyncPolicy<HttpResponseMessage> _policy;
+
+    /// <summary> OAuth application Client ID </summary>
     protected readonly string ClientId;
+
+    /// <summary> Logger instance </summary>
     protected readonly ILogger<IBitrix24Client> Logger;
+
+    /// <summary> Bitrix24 portal </summary>
     protected readonly string Portal;
+
+    /// <summary> Request timeout </summary>
     protected readonly TimeSpan Timeout;
 
-    protected Bitrix24Client(string portal, string clientId, string clientSecret, ILogger<IBitrix24Client> logger, TimeSpan timeout)
+    /// <param name="portal"> Bitrix24 portal </param>
+    /// <param name="clientId"> OAuth application Client ID </param>
+    /// <param name="clientSecret"> OAuth application Client Secret</param>
+    /// <param name="logger"> Logger instance </param>
+    /// <param name="timeout"> Request timeout </param>
+    protected Bitrix24ClientBase(string portal, string clientId, string clientSecret, ILogger<IBitrix24Client> logger, TimeSpan timeout)
     {
         ClientId = string.IsNullOrWhiteSpace(clientId) ? throw new ArgumentOutOfRangeException(nameof(clientId)) : clientId;
         _clientSecret = string.IsNullOrWhiteSpace(clientSecret) ? throw new ArgumentOutOfRangeException(nameof(clientSecret)) : clientSecret;
@@ -63,7 +76,8 @@ public abstract class Bitrix24Client : IBitrix24Client, IDisposable
     void IDisposable.Dispose()
         => _client.Dispose();
 
-    protected async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)
+    /// <inheritdoc cref="IBitrix24Client.GetAsync" />
+    protected virtual async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)
     {
         await InitAsync(cancellation).ConfigureAwait(false);
         using var result = await _policy.GetAsync(_client, method, Logger, cancellation).ConfigureAwait(false);
@@ -74,7 +88,8 @@ public abstract class Bitrix24Client : IBitrix24Client, IDisposable
 #endif
     }
 
-    protected async Task<JToken> PostRequestAsync(string method, JToken data, CancellationToken cancellation = default)
+    /// <inheritdoc cref="IBitrix24Client.PostAsync" />
+    protected virtual async Task<JToken> PostRequestAsync(string method, JToken data, CancellationToken cancellation = default)
     {
         await InitAsync(cancellation).ConfigureAwait(false);
         using var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
@@ -88,9 +103,10 @@ public abstract class Bitrix24Client : IBitrix24Client, IDisposable
 
     private async Task AuthAsync(CancellationToken cancellation)
     {
-        var currentRefreshToken = await GetValue("b24_refresh").ConfigureAwait(false);
-        if (currentRefreshToken.HasValue && await RefreshAsync(currentRefreshToken.Value, cancellation).ConfigureAwait(false)) return;
-        await RemoveValue("b24_refresh").ConfigureAwait(false);
+        await RemoveAccessToken().ConfigureAwait(false);
+        var currentRefreshToken = await GetRefreshToken().ConfigureAwait(false);
+        if (!string.IsNullOrWhiteSpace(currentRefreshToken) && await RefreshAsync(currentRefreshToken, cancellation).ConfigureAwait(false)) return;
+        await RemoveRefreshToken().ConfigureAwait(false);
         while (!await AuthorizeAsync(cancellation).ConfigureAwait(false)) { }
     }
 
@@ -143,9 +159,9 @@ public abstract class Bitrix24Client : IBitrix24Client, IDisposable
     private async ValueTask SetTokenAsync(JToken data)
     {
         var refresh = data.Value<string>("refresh_token")!;
-        await StoreValue("b24_refresh", refresh).ConfigureAwait(false);
+        await StoreRefreshToken(refresh).ConfigureAwait(false);
         var access = data.Value<string>("access_token")!;
-        await StoreValue("b24_access", access).ConfigureAwait(false);
+        await StoreAccessToken(access).ConfigureAwait(false);
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", access);
     }
 
@@ -153,17 +169,36 @@ public abstract class Bitrix24Client : IBitrix24Client, IDisposable
     {
         if (_client.DefaultRequestHeaders.Authorization == null)
         {
-            var accessToken = await GetValue("b24_access").ConfigureAwait(false);
-            if (accessToken.HasValue)
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Value);
+            var accessToken = await GetAccessToken().ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(accessToken))
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             else await AuthAsync(cancellation).ConfigureAwait(false);
         }
     }
 
-    protected abstract Task<string> GetAuthorizationCode(CancellationToken cancellation);
-    protected abstract ValueTask<Maybe<string>> GetValue(string key);
-    protected abstract ValueTask StoreValue(string key, string value);
-    protected abstract ValueTask RemoveValue(string key);
+    /// <summary> Obtain OAuth Authorization Code </summary>
+    /// <param name="cancellation"> Cancellation token </param>
+    protected abstract ValueTask<string> GetAuthorizationCode(CancellationToken cancellation);
+
+    /// <summary> Get Access token from persistent storage </summary>
+    protected abstract ValueTask<string> GetAccessToken();
+
+    /// <summary> Save Access token to persistent storage </summary>
+    /// <param name="token"> Access token</param>
+    protected abstract ValueTask StoreAccessToken(string token);
+
+    /// <summary> Remove Access token from persistent storage </summary>
+    protected abstract ValueTask RemoveAccessToken();
+
+    /// <summary> Get Refresh token from persistent storage </summary>
+    protected abstract ValueTask<string> GetRefreshToken();
+
+    /// <summary> Save Refresh token to persistent storage </summary>
+    /// <param name="token"> Refresh token</param>
+    protected abstract ValueTask StoreRefreshToken(string token);
+
+    /// <summary> Remove Refresh token from persistent storage </summary>
+    protected abstract ValueTask RemoveRefreshToken();
 }
 
 }
