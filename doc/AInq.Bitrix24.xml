@@ -4,5 +4,83 @@
         <name>AInq.Bitrix24</name>
     </assembly>
     <members>
+        <member name="T:AInq.Bitrix24.Bitrix24ClientBase">
+            <summary> Bitrix24 REST API client base </summary>
+        </member>
+        <member name="F:AInq.Bitrix24.Bitrix24ClientBase.ClientId">
+            <summary> OAuth application Client ID </summary>
+        </member>
+        <member name="F:AInq.Bitrix24.Bitrix24ClientBase.Logger">
+            <summary> Logger instance </summary>
+        </member>
+        <member name="F:AInq.Bitrix24.Bitrix24ClientBase.Portal">
+            <summary> Bitrix24 portal </summary>
+        </member>
+        <member name="F:AInq.Bitrix24.Bitrix24ClientBase.Timeout">
+            <summary> Request timeout </summary>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.#ctor(System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger{AInq.Bitrix24.IBitrix24Client},System.TimeSpan)">
+            <param name="portal"> Bitrix24 portal </param>
+            <param name="clientId"> OAuth application Client ID </param>
+            <param name="clientSecret"> OAuth application Client Secret</param>
+            <param name="logger"> Logger instance </param>
+            <param name="timeout"> Request timeout </param>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.GetRequestAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Bitrix24.IBitrix24Client.GetAsync(System.String,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.PostRequestAsync(System.String,Newtonsoft.Json.Linq.JToken,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Bitrix24.IBitrix24Client.PostAsync(System.String,Newtonsoft.Json.Linq.JToken,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.GetAuthorizationCode(System.Threading.CancellationToken)">
+            <summary> Obtain OAuth Authorization Code </summary>
+            <param name="cancellation"> Cancellation token </param>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.GetAccessToken">
+            <summary> Get Access token from persistent storage </summary>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.StoreAccessToken(System.String)">
+            <summary> Save Access token to persistent storage </summary>
+            <param name="token"> Access token</param>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.RemoveAccessToken">
+            <summary> Remove Access token from persistent storage </summary>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.GetRefreshToken">
+            <summary> Get Refresh token from persistent storage </summary>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.StoreRefreshToken(System.String)">
+            <summary> Save Refresh token to persistent storage </summary>
+            <param name="token"> Refresh token</param>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.RemoveRefreshToken">
+            <summary> Remove Refresh token from persistent storage </summary>
+        </member>
+        <member name="T:AInq.Bitrix24.Bitrix24ClientTimeoutBase">
+            <summary> Bitrix24 REST API client base with request timeout </summary>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientTimeoutBase.#ctor(System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger{AInq.Bitrix24.IBitrix24Client},System.TimeSpan)">
+            <inheritdoc />
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientTimeoutBase.GetRequestAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24ClientTimeoutBase.PostRequestAsync(System.String,Newtonsoft.Json.Linq.JToken,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:AInq.Bitrix24.IBitrix24Client">
+            <summary> Bitrix24 REST API client interface </summary>
+        </member>
+        <member name="M:AInq.Bitrix24.IBitrix24Client.GetAsync(System.String,System.Threading.CancellationToken)">
+            <summary> Call GET method </summary>
+            <param name="method"> REST method name</param>
+            <param name="cancellation"> Cancellation token </param>
+        </member>
+        <member name="M:AInq.Bitrix24.IBitrix24Client.PostAsync(System.String,Newtonsoft.Json.Linq.JToken,System.Threading.CancellationToken)">
+            <summary> Call POST method </summary>
+            <param name="method"> REST method name</param>
+            <param name="data"> Call data </param>
+            <param name="cancellation"> Cancellation token </param>
+        </member>
     </members>
 </doc>
