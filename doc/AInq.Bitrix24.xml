@@ -19,12 +19,14 @@
         <member name="F:AInq.Bitrix24.Bitrix24ClientBase.Timeout">
             <summary> Request timeout </summary>
         </member>
-        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.#ctor(System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger{AInq.Bitrix24.IBitrix24Client},System.TimeSpan)">
+        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.#ctor(System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger{AInq.Bitrix24.IBitrix24Client},System.TimeSpan,System.Int32,System.Int32)">
             <param name="portal"> Bitrix24 portal </param>
             <param name="clientId"> OAuth application Client ID </param>
             <param name="clientSecret"> OAuth application Client Secret</param>
             <param name="logger"> Logger instance </param>
             <param name="timeout"> Request timeout </param>
+            <param name="maxTransientRetry"> Maximum retry count on transient HTTP errors (-1 for retry forever) </param>
+            <param name="maxTimeoutRetry"> Maximum retry count on HTTP 429 (-1 for retry forever) </param>
         </member>
         <member name="M:AInq.Bitrix24.Bitrix24ClientBase.GetRequestAsync(System.String,System.Threading.CancellationToken)">
             <inheritdoc cref="M:AInq.Bitrix24.IBitrix24Client.GetAsync(System.String,System.Threading.CancellationToken)" />
@@ -57,9 +59,9 @@
             <summary> Remove Refresh token from persistent storage </summary>
         </member>
         <member name="T:AInq.Bitrix24.Bitrix24ClientTimeoutBase">
-            <summary> Bitrix24 REST API client base with request timeout </summary>
+            <summary> Bitrix24 REST API client base with request timeout control </summary>
         </member>
-        <member name="M:AInq.Bitrix24.Bitrix24ClientTimeoutBase.#ctor(System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger{AInq.Bitrix24.IBitrix24Client},System.TimeSpan)">
+        <member name="M:AInq.Bitrix24.Bitrix24ClientTimeoutBase.#ctor(System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger{AInq.Bitrix24.IBitrix24Client},System.TimeSpan,System.Int32,System.Int32)">
             <inheritdoc />
         </member>
         <member name="M:AInq.Bitrix24.Bitrix24ClientTimeoutBase.GetRequestAsync(System.String,System.Threading.CancellationToken)">

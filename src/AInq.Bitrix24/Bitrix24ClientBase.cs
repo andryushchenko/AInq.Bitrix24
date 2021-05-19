@@ -34,6 +34,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     private const string AuthPath = "https://oauth.bitrix.info/oauth/token/";
     private readonly HttpClient _client;
     private readonly string _clientSecret;
+    private readonly int _maxRetry;
     private readonly IAsyncPolicy<HttpResponseMessage> _policy;
 
     /// <summary> OAuth application Client ID </summary>
@@ -53,7 +54,10 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     /// <param name="clientSecret"> OAuth application Client Secret</param>
     /// <param name="logger"> Logger instance </param>
     /// <param name="timeout"> Request timeout </param>
-    protected Bitrix24ClientBase(string portal, string clientId, string clientSecret, ILogger<IBitrix24Client> logger, TimeSpan timeout)
+    /// <param name="maxTransientRetry"> Maximum retry count on transient HTTP errors (-1 for retry forever) </param>
+    /// <param name="maxTimeoutRetry"> Maximum retry count on HTTP 429 (-1 for retry forever) </param>
+    protected Bitrix24ClientBase(string portal, string clientId, string clientSecret, ILogger<IBitrix24Client> logger, TimeSpan timeout,
+        int maxTransientRetry = -1, int maxTimeoutRetry = -1)
     {
         ClientId = string.IsNullOrWhiteSpace(clientId) ? throw new ArgumentOutOfRangeException(nameof(clientId)) : clientId;
         _clientSecret = string.IsNullOrWhiteSpace(clientSecret) ? throw new ArgumentOutOfRangeException(nameof(clientSecret)) : clientSecret;
@@ -61,10 +65,21 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
         Timeout = timeout > TimeSpan.Zero ? timeout : throw new ArgumentOutOfRangeException(nameof(timeout));
         Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _client = new HttpClient {BaseAddress = new Uri($"https://{Portal}/rest/")};
-        _policy = Policy.WrapAsync(HttpRetryPolicies.TransientRetryAsyncPolicy(),
-            HttpRetryPolicies.TimeoutRetryAsyncPolicy(Timeout),
+        _policy = Policy.WrapAsync(maxTransientRetry switch
+            {
+                -1 => HttpRetryPolicies.TransientRetryAsyncPolicy(),
+                >0 => HttpRetryPolicies.TransientRetryAsyncPolicy(maxTransientRetry),
+                _ => throw new ArgumentOutOfRangeException(nameof(maxTransientRetry))
+            },
+            maxTimeoutRetry switch
+            {
+                -1 => HttpRetryPolicies.TimeoutRetryAsyncPolicy(Timeout),
+                >0 => HttpRetryPolicies.TimeoutRetryAsyncPolicy(Timeout, maxTimeoutRetry),
+                _ => throw new ArgumentOutOfRangeException(nameof(maxTimeoutRetry))
+            },
             Policy.HandleResult<HttpResponseMessage>(response => response.StatusCode == HttpStatusCode.Unauthorized)
                   .RetryAsync(async (_, _, ctx) => await AuthAsync(ctx.GetCancellationToken()).ConfigureAwait(false)));
+        _maxRetry = maxTransientRetry;
     }
 
     Task<JToken> IBitrix24Client.GetAsync(string method, CancellationToken cancellation)
@@ -121,9 +136,10 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             new KeyValuePair<string?, string?>("client_secret", _clientSecret),
             new KeyValuePair<string?, string?>("code", code)
         });
-        using var result = await HttpRetryPolicies.TransientRetryAsyncPolicy()
-                                                  .PostAsync(AuthPath, content, Logger, cancellation)
-                                                  .ConfigureAwait(false);
+        using var result =
+            await (_maxRetry > 0 ? HttpRetryPolicies.TransientRetryAsyncPolicy(_maxRetry) : HttpRetryPolicies.TransientRetryAsyncPolicy())
+                  .PostAsync(AuthPath, content, Logger, cancellation)
+                  .ConfigureAwait(false);
         if (!result.IsSuccessStatusCode) return false;
 #if NET5_0
         var data = JToken.Parse(await result.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false));
@@ -143,9 +159,10 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             new KeyValuePair<string?, string?>("client_secret", _clientSecret),
             new KeyValuePair<string?, string?>("refresh_token", refreshToken)
         });
-        using var result = await HttpRetryPolicies.TransientRetryAsyncPolicy()
-                                                  .PostAsync(AuthPath, content, Logger, cancellation)
-                                                  .ConfigureAwait(false);
+        using var result =
+            await (_maxRetry > 0 ? HttpRetryPolicies.TransientRetryAsyncPolicy(_maxRetry) : HttpRetryPolicies.TransientRetryAsyncPolicy())
+                  .PostAsync(AuthPath, content, Logger, cancellation)
+                  .ConfigureAwait(false);
         if (!result.IsSuccessStatusCode) return false;
 #if NET5_0
         var data = JToken.Parse(await result.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false));

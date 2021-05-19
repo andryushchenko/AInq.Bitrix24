@@ -22,14 +22,15 @@ using System.Threading.Tasks;
 namespace AInq.Bitrix24
 {
 
-/// <summary> Bitrix24 REST API client base with request timeout </summary>
-public abstract class Bitrix24ClientTimeoutBase: Bitrix24ClientBase
+/// <summary> Bitrix24 REST API client base with request timeout control </summary>
+public abstract class Bitrix24ClientTimeoutBase : Bitrix24ClientBase
 {
     private Task _delay = Task.CompletedTask;
 
     /// <inheritdoc />
-    protected Bitrix24ClientTimeoutBase(string portal, string clientId, string clientSecret, ILogger<IBitrix24Client> logger, TimeSpan timeout) 
-        : base(portal, clientId, clientSecret, logger, timeout) { }
+    protected Bitrix24ClientTimeoutBase(string portal, string clientId, string clientSecret, ILogger<IBitrix24Client> logger, TimeSpan timeout,
+        int maxTransientRetry = -1, int maxTimeoutRetry = -1)
+        : base(portal, clientId, clientSecret, logger, timeout, maxTransientRetry, maxTimeoutRetry) { }
 
     /// <inheritdoc />
     protected override async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)

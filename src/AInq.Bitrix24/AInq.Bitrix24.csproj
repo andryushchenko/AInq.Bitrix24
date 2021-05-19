@@ -11,11 +11,11 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>[UPD] Package update</PackageReleaseNotes>
+    <PackageReleaseNotes>[ADD] Specify maximum retry count</PackageReleaseNotes>
     <Description>Base client for Bitrix24 Rest API</Description>
   </PropertyGroup>
 
@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="AInq.Helpers.Polly" Version="1.1.0" />
+    <PackageReference Include="AInq.Helpers.Polly" Version="1.1.1" />
     <PackageReference Include="Nito.AsyncEx.Tasks" Version="5.1.0" />
   </ItemGroup>
 
