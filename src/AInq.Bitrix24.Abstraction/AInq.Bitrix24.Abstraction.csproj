@@ -6,6 +6,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Product>AInq.Bitrix24</Product>
+    <RootNamespace>AInq.Bitrix24</RootNamespace>
     <Authors>Anton Andryushchenko</Authors>
     <RepositoryUrl>https://github.com/andryushchenko/AInq.Bitrix24</RepositoryUrl>
     <Copyright>Anton Andryushchenko</Copyright>
@@ -20,20 +21,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>..\..\doc\AInq.Bitrix24.xml</DocumentationFile>
+    <DocumentationFile>..\..\doc\AInq.Bitrix24.Abstraction.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AInq.Helpers.Polly" Version="1.1.1" />
-    <PackageReference Include="Nito.AsyncEx.Tasks" Version="5.1.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\AInq.Bitrix24.Abstraction\AInq.Bitrix24.Abstraction.csproj" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
 </Project>

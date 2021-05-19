@@ -32,10 +32,11 @@ namespace AInq.Bitrix24
 public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
 {
     private const string AuthPath = "https://oauth.bitrix.info/oauth/token/";
+    private readonly IAsyncPolicy<HttpResponseMessage> _authPolicy;
     private readonly HttpClient _client;
     private readonly string _clientSecret;
     private readonly int _maxRetry;
-    private readonly IAsyncPolicy<HttpResponseMessage> _policy;
+    private readonly IAsyncPolicy<HttpResponseMessage> _requestPolicy;
 
     /// <summary> OAuth application Client ID </summary>
     protected readonly string ClientId;
@@ -65,7 +66,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
         Timeout = timeout > TimeSpan.Zero ? timeout : throw new ArgumentOutOfRangeException(nameof(timeout));
         Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _client = new HttpClient {BaseAddress = new Uri($"https://{Portal}/rest/")};
-        _policy = Policy.WrapAsync(maxTransientRetry switch
+        _requestPolicy = Policy.WrapAsync(maxTransientRetry switch
             {
                 -1 => HttpRetryPolicies.TransientRetryAsyncPolicy(),
                 >0 => HttpRetryPolicies.TransientRetryAsyncPolicy(maxTransientRetry),
@@ -79,6 +80,9 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             },
             Policy.HandleResult<HttpResponseMessage>(response => response.StatusCode == HttpStatusCode.Unauthorized)
                   .RetryAsync(async (_, _, ctx) => await AuthAsync(ctx.GetCancellationToken()).ConfigureAwait(false)));
+        _authPolicy = maxTransientRetry > 0
+            ? HttpRetryPolicies.TransientRetryAsyncPolicy(_maxRetry)
+            : HttpRetryPolicies.TransientRetryAsyncPolicy();
         _maxRetry = maxTransientRetry;
     }
 
@@ -95,25 +99,71 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     protected virtual async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)
     {
         await InitAsync(cancellation).ConfigureAwait(false);
-        using var result = await _policy.GetAsync(_client, method, Logger, cancellation).ConfigureAwait(false);
-#if NETSTANDARD
-        return JToken.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+        string result;
+        HttpStatusCode status;
+        try
+        {
+            using var response = await _requestPolicy.GetAsync(_client, method, Logger, cancellation).ConfigureAwait(false);
+            status = response.StatusCode;
+#if NET5_0
+            result = await response.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false);
 #else
-        return JToken.Parse(await result.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false));
+            result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 #endif
+        }
+        catch (Exception ex)
+        {
+            throw new Bitrix24CallException(method, ex);
+        }
+        if (status == HttpStatusCode.OK)
+            try
+            {
+                return JToken.Parse(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Bitrix24CallException(method, "Error parsing response", ex);
+            }
+        var exception = new Bitrix24CallException(method);
+        exception.Data["Status"] = status;
+        exception.Data["Response"] = result;
+        throw exception;
     }
 
     /// <inheritdoc cref="IBitrix24Client.PostAsync" />
     protected virtual async Task<JToken> PostRequestAsync(string method, JToken data, CancellationToken cancellation = default)
     {
         await InitAsync(cancellation).ConfigureAwait(false);
-        using var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
-        using var result = await _policy.PostAsync(_client, method, content, Logger, cancellation).ConfigureAwait(false);
+        string result;
+        HttpStatusCode status;
+        try
+        {
+            using var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
+            using var response = await _requestPolicy.PostAsync(_client, method, content, Logger, cancellation).ConfigureAwait(false);
+            status = response.StatusCode;
 #if NET5_0
-        return JToken.Parse(await result.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false));
+            result = await response.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false);
 #else
-        return JToken.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+            result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 #endif
+        }
+        catch (Exception ex)
+        {
+            throw new Bitrix24CallException(method, ex);
+        }
+        if (status == HttpStatusCode.OK)
+            try
+            {
+                return JToken.Parse(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Bitrix24CallException(method, "Error parsing response", ex);
+            }
+        var exception = new Bitrix24CallException(method);
+        exception.Data["Status"] = status;
+        exception.Data["Response"] = result;
+        throw exception;
     }
 
     private async Task AuthAsync(CancellationToken cancellation)
@@ -136,10 +186,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             new KeyValuePair<string?, string?>("client_secret", _clientSecret),
             new KeyValuePair<string?, string?>("code", code)
         });
-        using var result =
-            await (_maxRetry > 0 ? HttpRetryPolicies.TransientRetryAsyncPolicy(_maxRetry) : HttpRetryPolicies.TransientRetryAsyncPolicy())
-                  .PostAsync(AuthPath, content, Logger, cancellation)
-                  .ConfigureAwait(false);
+        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, cancellation).ConfigureAwait(false);
         if (!result.IsSuccessStatusCode) return false;
 #if NET5_0
         var data = JToken.Parse(await result.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false));
@@ -159,10 +206,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             new KeyValuePair<string?, string?>("client_secret", _clientSecret),
             new KeyValuePair<string?, string?>("refresh_token", refreshToken)
         });
-        using var result =
-            await (_maxRetry > 0 ? HttpRetryPolicies.TransientRetryAsyncPolicy(_maxRetry) : HttpRetryPolicies.TransientRetryAsyncPolicy())
-                  .PostAsync(AuthPath, content, Logger, cancellation)
-                  .ConfigureAwait(false);
+        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, cancellation).ConfigureAwait(false);
         if (!result.IsSuccessStatusCode) return false;
 #if NET5_0
         var data = JToken.Parse(await result.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false));

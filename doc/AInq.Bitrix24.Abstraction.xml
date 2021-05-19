@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AInq.Bitrix24.Abstraction</name>
+    </assembly>
+    <members>
+        <member name="T:AInq.Bitrix24.Bitrix24CallException">
+            <summary> Bitrix24 REST API call exception  </summary>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24CallException.#ctor(System.String)">
+            <param name="method"> REST API method name </param>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24CallException.#ctor(System.String,System.String)">
+            <param name="method"> REST API method name </param>
+            <param name="message"> Error message </param>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24CallException.#ctor(System.String,System.Exception)">
+            <param name="method"> REST API method name </param>
+            <param name="innerException"> Inner exception </param>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24CallException.#ctor(System.String,System.String,System.Exception)">
+            <param name="method"> REST API method name </param>
+            ///
+            <param name="message"> Error message </param>
+            ///
+            <param name="innerException"> Inner exception </param>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24CallException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <inheritdoc />
+        </member>
+        <member name="P:AInq.Bitrix24.Bitrix24CallException.Method">
+            <summary>  REST API method name </summary>
+        </member>
+        <member name="T:AInq.Bitrix24.IBitrix24Client">
+            <summary> Bitrix24 REST API client interface </summary>
+        </member>
+        <member name="M:AInq.Bitrix24.IBitrix24Client.GetAsync(System.String,System.Threading.CancellationToken)">
+            <summary> Call GET method </summary>
+            <param name="method"> REST method name</param>
+            <param name="cancellation"> Cancellation token </param>
+        </member>
+        <member name="M:AInq.Bitrix24.IBitrix24Client.PostAsync(System.String,Newtonsoft.Json.Linq.JToken,System.Threading.CancellationToken)">
+            <summary> Call POST method </summary>
+            <param name="method"> REST method name</param>
+            <param name="data"> Call data </param>
+            <param name="cancellation"> Cancellation token </param>
+        </member>
+    </members>
+</doc>
