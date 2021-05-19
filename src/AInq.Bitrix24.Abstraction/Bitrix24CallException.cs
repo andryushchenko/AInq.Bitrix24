@@ -39,9 +39,7 @@ public class Bitrix24CallException : Exception
         => Method = method;
 
     /// <param name="method"> REST API method name </param>
-    /// ///
     /// <param name="message"> Error message </param>
-    /// ///
     /// <param name="innerException"> Inner exception </param>
     public Bitrix24CallException(string method, string message, Exception innerException) : base(message, innerException)
         => Method = method;
