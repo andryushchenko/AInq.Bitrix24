@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{3CA1228D-9
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AInq.Bitrix24.Abstraction", "src\AInq.Bitrix24.Abstraction\AInq.Bitrix24.Abstraction.csproj", "{690786D3-1D69-4D67-8113-ED443D0DACE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Bitrix24.Abstraction", "src\AInq.Bitrix24.Abstraction\AInq.Bitrix24.Abstraction.csproj", "{690786D3-1D69-4D67-8113-ED443D0DACE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AInq.Bitrix24.Api", "src\AInq.Bitrix24.Api\AInq.Bitrix24.Api.csproj", "{86643D22-0843-4393-BFA4-B0205B5A5BAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,10 @@ Global
 		{690786D3-1D69-4D67-8113-ED443D0DACE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{690786D3-1D69-4D67-8113-ED443D0DACE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{690786D3-1D69-4D67-8113-ED443D0DACE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86643D22-0843-4393-BFA4-B0205B5A5BAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86643D22-0843-4393-BFA4-B0205B5A5BAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86643D22-0843-4393-BFA4-B0205B5A5BAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86643D22-0843-4393-BFA4-B0205B5A5BAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,6 +44,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{22B69AA6-C0B7-4243-98DF-B468A845AF54} = {11CFCCA5-ECD0-4BD3-AA40-1EEAF23BA1DC}
 		{690786D3-1D69-4D67-8113-ED443D0DACE1} = {11CFCCA5-ECD0-4BD3-AA40-1EEAF23BA1DC}
+		{86643D22-0843-4393-BFA4-B0205B5A5BAC} = {11CFCCA5-ECD0-4BD3-AA40-1EEAF23BA1DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C40EE65E-6A4D-4797-8380-F8259A075237}
