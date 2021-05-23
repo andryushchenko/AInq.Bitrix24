@@ -20,9 +20,7 @@
         </member>
         <member name="M:AInq.Bitrix24.Bitrix24CallException.#ctor(System.String,System.String,System.Exception)">
             <param name="method"> REST API method name </param>
-            ///
             <param name="message"> Error message </param>
-            ///
             <param name="innerException"> Inner exception </param>
         </member>
         <member name="M:AInq.Bitrix24.Bitrix24CallException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">

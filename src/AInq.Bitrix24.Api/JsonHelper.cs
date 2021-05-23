@@ -64,11 +64,19 @@ public static class JsonHelper
     /// <param name="token"> JSON source </param>
     /// <param name="ignoreTypeMismatch"> Skip values that can't be parsed, otherwise return empty array </param>
     public static int[] TryGetIntArray(this JToken token, bool ignoreTypeMismatch = true)
-        => token is JArray array
-            ? !ignoreTypeMismatch && array.Any(item => item.Type is not (JTokenType.Integer or JTokenType.Float or JTokenType.String))
+        => token.Type switch
+        {
+            JTokenType.Array => !ignoreTypeMismatch
+                                && token.Any(item => item.Type is not (JTokenType.Integer or JTokenType.Float or JTokenType.String))
                 ? Array.Empty<int>()
-                : array.Select(item => item.TryGetInt()).Values().ToArray()
-            : Array.Empty<int>();
+                : token.Select(item => item.TryGetInt()).Values().ToArray(),
+            JTokenType.Integer => new[] {token.Value<int>()},
+            JTokenType.String => int.TryParse(token.Value<string>(), out var result)
+                ? new[] {result}
+                : Array.Empty<int>(),
+            JTokenType.Float => new[] {(int) token.Value<float>()},
+            _ => Array.Empty<int>()
+        };
 
     /// <summary> Try get <see cref="int" /> values array </summary>
     /// <param name="token"> JSON source </param>
