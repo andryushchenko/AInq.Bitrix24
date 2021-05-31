@@ -11,8 +11,7 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -25,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AInq.Helpers.Polly" Version="1.1.1" />
+    <PackageReference Include="AInq.Helpers.Polly" Version="1.1.2" />
     <PackageReference Include="Nito.AsyncEx.Tasks" Version="5.1.0" />
   </ItemGroup>
 
@@ -35,13 +34,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AInq.Bitrix24.Abstraction\AInq.Bitrix24.Abstraction.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\README.md">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
   </ItemGroup>
 
 </Project>
