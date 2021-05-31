@@ -35,7 +35,6 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     private readonly IAsyncPolicy<HttpResponseMessage> _authPolicy;
     private readonly HttpClient _client;
     private readonly string _clientSecret;
-    private readonly int _maxRetry;
     private readonly IAsyncPolicy<HttpResponseMessage> _requestPolicy;
 
     /// <summary> OAuth application Client ID </summary>
@@ -81,9 +80,8 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             Policy.HandleResult<HttpResponseMessage>(response => response.StatusCode == HttpStatusCode.Unauthorized)
                   .RetryAsync(async (_, _, ctx) => await AuthAsync(ctx.GetCancellationToken()).ConfigureAwait(false)));
         _authPolicy = maxTransientRetry > 0
-            ? HttpRetryPolicies.TransientRetryAsyncPolicy(_maxRetry)
+            ? HttpRetryPolicies.TransientRetryAsyncPolicy(maxTransientRetry)
             : HttpRetryPolicies.TransientRetryAsyncPolicy();
-        _maxRetry = maxTransientRetry;
     }
 
     Task<JToken> IBitrix24Client.GetAsync(string method, CancellationToken cancellation)
