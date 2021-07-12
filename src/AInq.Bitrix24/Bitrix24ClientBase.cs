@@ -96,13 +96,13 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     /// <inheritdoc cref="IBitrix24Client.GetAsync" />
     protected virtual async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)
     {
-        using var scope = Logger.BeginScope(new Dictionary<string, object> {{"Http Method", HttpMethod.Get}, {"Bitrix24 Method", method}});
+        using var scope = Logger.BeginScope(new Dictionary<string, object> {{"Bitrix24 Method", method}});
         await InitAsync(cancellation).ConfigureAwait(false);
         string result;
         HttpStatusCode status;
         try
         {
-            using var response = await _requestPolicy.GetAsync(_client, method, Logger, cancellation, requestLogLevel: LogLevel.None)
+            using var response = await _requestPolicy.GetAsync(_client, method, Logger, cancellation)
                                                      .ConfigureAwait(false);
             status = response.StatusCode;
 #if NET5_0
@@ -138,14 +138,14 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     /// <inheritdoc cref="IBitrix24Client.PostAsync" />
     protected virtual async Task<JToken> PostRequestAsync(string method, JToken data, CancellationToken cancellation = default)
     {
-        using var scope = Logger.BeginScope(new Dictionary<string, object> {{"Http Method", HttpMethod.Post}, {"Bitrix24 Method", method}});
+        using var scope = Logger.BeginScope(new Dictionary<string, object> {{"Bitrix24 Method", method}});
         await InitAsync(cancellation).ConfigureAwait(false);
         string result;
         HttpStatusCode status;
         try
         {
             using var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
-            using var response = await _requestPolicy.PostAsync(_client, method, content, Logger, cancellation, requestLogLevel: LogLevel.None)
+            using var response = await _requestPolicy.PostAsync(_client, method, content, Logger, cancellation)
                                                      .ConfigureAwait(false);
             status = response.StatusCode;
 #if NET5_0
@@ -199,7 +199,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             new KeyValuePair<string?, string?>("client_secret", _clientSecret),
             new KeyValuePair<string?, string?>("code", code)
         });
-        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, cancellation, requestLogLevel: LogLevel.None).ConfigureAwait(false);
+        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, cancellation).ConfigureAwait(false);
         if (!result.IsSuccessStatusCode)
         {
             Logger.LogError("Authorization failed with {Code}", result.StatusCode);
@@ -225,7 +225,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             new KeyValuePair<string?, string?>("client_secret", _clientSecret),
             new KeyValuePair<string?, string?>("refresh_token", refreshToken)
         });
-        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, cancellation, requestLogLevel: LogLevel.None).ConfigureAwait(false);
+        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, cancellation).ConfigureAwait(false);
         if (!result.IsSuccessStatusCode)
         {
             Logger.LogWarning("Token refresh failed with {Code}", result.StatusCode);
