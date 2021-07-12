@@ -29,8 +29,8 @@ public abstract class Bitrix24ClientTimeoutBase : Bitrix24ClientBase
 
     /// <inheritdoc />
     protected Bitrix24ClientTimeoutBase(string portal, string clientId, string clientSecret, ILogger<IBitrix24Client> logger, TimeSpan timeout,
-        int maxTransientRetry = -1, int maxTimeoutRetry = -1)
-        : base(portal, clientId, clientSecret, logger, timeout, maxTransientRetry, maxTimeoutRetry) { }
+        int maxTransientRetry = -1, int maxTimeoutRetry = -1, LogLevel logLevel = LogLevel.Debug)
+        : base(portal, clientId, clientSecret, logger, timeout, maxTransientRetry, maxTimeoutRetry, logLevel) { }
 
     /// <inheritdoc />
     protected override async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)

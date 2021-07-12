@@ -35,6 +35,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     private readonly IAsyncPolicy<HttpResponseMessage> _authPolicy;
     private readonly HttpClient _client;
     private readonly string _clientSecret;
+    private readonly LogLevel _logLevel;
     private readonly IAsyncPolicy<HttpResponseMessage> _requestPolicy;
 
     /// <summary> OAuth application Client ID </summary>
@@ -56,14 +57,16 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     /// <param name="timeout"> Request timeout </param>
     /// <param name="maxTransientRetry"> Maximum retry count on transient HTTP errors (-1 for retry forever) </param>
     /// <param name="maxTimeoutRetry"> Maximum retry count on HTTP 429 (-1 for retry forever) </param>
+    /// <param name="logLevel"> Request logging level </param>
     protected Bitrix24ClientBase(string portal, string clientId, string clientSecret, ILogger<IBitrix24Client> logger, TimeSpan timeout,
-        int maxTransientRetry = -1, int maxTimeoutRetry = -1)
+        int maxTransientRetry = -1, int maxTimeoutRetry = -1, LogLevel logLevel = LogLevel.Debug)
     {
         ClientId = string.IsNullOrWhiteSpace(clientId) ? throw new ArgumentOutOfRangeException(nameof(clientId)) : clientId;
         _clientSecret = string.IsNullOrWhiteSpace(clientSecret) ? throw new ArgumentOutOfRangeException(nameof(clientSecret)) : clientSecret;
         Portal = string.IsNullOrWhiteSpace(portal) ? throw new ArgumentOutOfRangeException(nameof(portal)) : portal;
         Timeout = timeout > TimeSpan.Zero ? timeout : throw new ArgumentOutOfRangeException(nameof(timeout));
         Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _logLevel = logLevel;
         _client = new HttpClient {BaseAddress = new Uri($"https://{Portal}/rest/")};
         _requestPolicy = Policy.WrapAsync(maxTransientRetry switch
             {
@@ -102,7 +105,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
         HttpStatusCode status;
         try
         {
-            using var response = await _requestPolicy.GetAsync(_client, method, Logger, cancellation)
+            using var response = await _requestPolicy.GetAsync(_client, method, Logger, cancellation, requestLogLevel: _logLevel)
                                                      .ConfigureAwait(false);
             status = response.StatusCode;
 #if NET5_0
@@ -120,7 +123,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             try
             {
                 var json = JToken.Parse(result);
-                Logger.LogInformation("Request success");
+                Logger.Log(_logLevel, "Request success");
                 return json;
             }
             catch (Exception ex)
@@ -145,7 +148,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
         try
         {
             using var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
-            using var response = await _requestPolicy.PostAsync(_client, method, content, Logger, cancellation)
+            using var response = await _requestPolicy.PostAsync(_client, method, content, Logger, cancellation, requestLogLevel: _logLevel)
                                                      .ConfigureAwait(false);
             status = response.StatusCode;
 #if NET5_0
@@ -163,7 +166,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             try
             {
                 var json = JToken.Parse(result);
-                Logger.LogInformation("Request success");
+                Logger.Log(_logLevel, "Request success");
                 return json;
             }
             catch (Exception ex)
@@ -199,7 +202,8 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             new KeyValuePair<string?, string?>("client_secret", _clientSecret),
             new KeyValuePair<string?, string?>("code", code)
         });
-        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, cancellation).ConfigureAwait(false);
+        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, cancellation, requestLogLevel: _logLevel)
+                                            .ConfigureAwait(false);
         if (!result.IsSuccessStatusCode)
         {
             Logger.LogError("Authorization failed with {Code}", result.StatusCode);
@@ -211,7 +215,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
         var data = JToken.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
 #endif
         await SetTokenAsync(data).ConfigureAwait(false);
-        Logger.LogInformation("Authorization success");
+        Logger.Log(_logLevel, "Authorization success");
         return true;
     }
 
@@ -225,7 +229,8 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             new KeyValuePair<string?, string?>("client_secret", _clientSecret),
             new KeyValuePair<string?, string?>("refresh_token", refreshToken)
         });
-        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, cancellation).ConfigureAwait(false);
+        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, cancellation, requestLogLevel: _logLevel)
+                                            .ConfigureAwait(false);
         if (!result.IsSuccessStatusCode)
         {
             Logger.LogWarning("Token refresh failed with {Code}", result.StatusCode);
@@ -237,7 +242,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
         var data = JToken.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
 #endif
         await SetTokenAsync(data).ConfigureAwait(false);
-        Logger.LogInformation("Token refresh success");
+        Logger.Log(_logLevel, "Token refresh success");
         return true;
     }
 
