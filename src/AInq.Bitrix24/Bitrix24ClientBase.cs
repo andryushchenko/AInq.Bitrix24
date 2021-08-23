@@ -67,7 +67,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
         Timeout = timeout > TimeSpan.Zero ? timeout : throw new ArgumentOutOfRangeException(nameof(timeout));
         Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _logLevel = logLevel;
-        _client = new HttpClient {BaseAddress = new Uri($"https://{Portal}/rest/")};
+        _client = new HttpClient { BaseAddress = new Uri($"https://{Portal}/rest/") };
         _requestPolicy = Policy.WrapAsync(maxTransientRetry switch
             {
                 -1 => HttpRetryPolicies.TransientRetryAsyncPolicy(),
@@ -99,7 +99,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     /// <inheritdoc cref="IBitrix24Client.GetAsync" />
     protected virtual async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)
     {
-        using var scope = Logger.BeginScope(new Dictionary<string, object> {{"Bitrix24 Method", method}});
+        using var scope = Logger.BeginScope(new Dictionary<string, object> { { "Bitrix24 Method", method } });
         await InitAsync(cancellation).ConfigureAwait(false);
         string result;
         HttpStatusCode status;
@@ -141,7 +141,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     /// <inheritdoc cref="IBitrix24Client.PostAsync" />
     protected virtual async Task<JToken> PostRequestAsync(string method, JToken data, CancellationToken cancellation = default)
     {
-        using var scope = Logger.BeginScope(new Dictionary<string, object> {{"Bitrix24 Method", method}});
+        using var scope = Logger.BeginScope(new Dictionary<string, object> { { "Bitrix24 Method", method } });
         await InitAsync(cancellation).ConfigureAwait(false);
         string result;
         HttpStatusCode status;

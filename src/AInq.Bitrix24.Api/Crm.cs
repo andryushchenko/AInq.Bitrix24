@@ -17,9 +17,7 @@ using System;
 namespace AInq.Bitrix24
 {
 
-/// <summary>
-/// Bitrix24 CRM Api calls
-/// </summary>
+/// <summary> Bitrix24 CRM Api calls </summary>
 public class Crm
 {
     /// <param name="client"> API Client </param>
@@ -33,10 +31,13 @@ public class Crm
 
     /// <summary> CRM Lead calls </summary>
     public CrmEntity Lead { get; }
+
     /// <summary> CRM Contact calls </summary>
     public CrmEntity Contact { get; }
+
     /// <summary> CRM Company calls </summary>
     public CrmEntity Company { get; }
+
     /// <summary> CRM Deal calls </summary>
     public CrmEntity Deal { get; }
 

@@ -64,7 +64,7 @@ public class CrmEntity
             return result["result"] switch
             {
                 JObject deal => Maybe.Value<JToken>(deal),
-                JArray {Count: > 0} array => Maybe.Value(array.First!),
+                JArray { Count: > 0 } array => Maybe.Value(array.First!),
                 _ => Maybe.None<JToken>()
             };
         }
@@ -90,7 +90,10 @@ public class CrmEntity
                      .ToList();
         foreach (var batch in ids.Where(id => id > 0).Batch(50))
         {
-            var request = new JObject {{"filter", new JObject {{"ID", new JArray(batch)}}}, {"select", new JArray(select)}, {"start", -1}};
+            var request = new JObject
+            {
+                { "filter", new JObject { { "ID", new JArray(batch) } } }, { "select", new JArray(select) }, { "start", -1 }
+            };
             if ((await Client.PostAsync($"crm.{Type}.list", request, cancellation))["result"] is not JArray result || result.Count == 0) continue;
             foreach (var item in result)
                 yield return item.DeepClone();
@@ -108,9 +111,9 @@ public class CrmEntity
         var result = (await Client.PostAsync($"crm.{Type}.update",
                                       new JObject
                                       {
-                                          {"id", id},
-                                          {"fields", (fields ?? throw new ArgumentNullException(nameof(fields))).DeepClone()},
-                                          {"params", new JObject {{"REGISTER_SONET_EVENT", registerSonetEvent ? "Y" : "N"}}}
+                                          { "id", id },
+                                          { "fields", (fields ?? throw new ArgumentNullException(nameof(fields))).DeepClone() },
+                                          { "params", new JObject { { "REGISTER_SONET_EVENT", registerSonetEvent ? "Y" : "N" } } }
                                       },
                                       cancellation)
                                   .ConfigureAwait(false))
@@ -127,7 +130,7 @@ public class CrmEntity
     public async Task<bool> DeleteAsync(int id, CancellationToken cancellation = default)
     {
         if (id < 1) throw new ArgumentOutOfRangeException(nameof(id));
-        var result = (await Client.PostAsync($"crm.{Type}.delete", new JObject {{"id", id}}, cancellation).ConfigureAwait(false))
+        var result = (await Client.PostAsync($"crm.{Type}.delete", new JObject { { "id", id } }, cancellation).ConfigureAwait(false))
             .TryGetBool("result");
         if (result.HasValue) return result.Value;
         var ex = new Bitrix24CallException($"crm.{Type}.delete", "Element delete failed");
@@ -145,8 +148,8 @@ public class CrmEntity
         var id = (await Client.PostAsync($"crm.{Type}.add",
                                   new JObject
                                   {
-                                      {"fields", (fields ?? throw new ArgumentNullException(nameof(fields))).DeepClone()},
-                                      {"params", new JObject {{"REGISTER_SONET_EVENT", registerSonetEvent ? "Y" : "N"}}}
+                                      { "fields", (fields ?? throw new ArgumentNullException(nameof(fields))).DeepClone() },
+                                      { "params", new JObject { { "REGISTER_SONET_EVENT", registerSonetEvent ? "Y" : "N" } } }
                                   },
                                   cancellation)
                               .ConfigureAwait(false))
@@ -166,10 +169,10 @@ public class CrmEntity
             data.Add(">ID", 0);
         var request = new JObject
         {
-            {"order", new JObject {{"ID", "ASC"}}},
-            {"filter", data},
-            {"select", new JArray(new HashSet<string>(select ?? throw new ArgumentNullException(nameof(select))).Append("ID"))},
-            {"start", -1}
+            { "order", new JObject { { "ID", "ASC" } } },
+            { "filter", data },
+            { "select", new JArray(new HashSet<string>(select ?? throw new ArgumentNullException(nameof(select))).Append("ID")) },
+            { "start", -1 }
         };
         while (true)
         {
