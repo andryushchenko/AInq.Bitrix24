@@ -5,9 +5,7 @@
     </assembly>
     <members>
         <member name="T:AInq.Bitrix24.Crm">
-            <summary>
-            Bitrix24 CRM Api calls
-            </summary>
+            <summary> Bitrix24 CRM Api calls </summary>
         </member>
         <member name="M:AInq.Bitrix24.Crm.#ctor(AInq.Bitrix24.IBitrix24Client)">
             <param name="client"> API Client </param>

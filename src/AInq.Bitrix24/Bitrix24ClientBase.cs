@@ -76,8 +76,8 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             },
             maxTimeoutRetry switch
             {
-                -1 => HttpRetryPolicies.TimeoutRetryAsyncPolicy(Timeout),
-                >0 => HttpRetryPolicies.TimeoutRetryAsyncPolicy(Timeout, maxTimeoutRetry),
+                -1 => HttpRetryPolicies.TimeoutRetryAsyncPolicy(TimeoutProvider),
+                >0 => HttpRetryPolicies.TimeoutRetryAsyncPolicy(TimeoutProvider, maxTimeoutRetry),
                 _ => throw new ArgumentOutOfRangeException(nameof(maxTimeoutRetry))
             },
             Policy.HandleResult<HttpResponseMessage>(response => response.StatusCode == HttpStatusCode.Unauthorized)
@@ -86,6 +86,9 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             ? HttpRetryPolicies.TransientRetryAsyncPolicy(maxTransientRetry)
             : HttpRetryPolicies.TransientRetryAsyncPolicy();
     }
+
+    private TimeSpan TimeoutProvider(int attempt)
+        => TimeSpan.FromTicks(Timeout.Ticks * attempt * attempt);
 
     Task<JToken> IBitrix24Client.GetAsync(string method, CancellationToken cancellation)
         => GetRequestAsync(method, cancellation);
