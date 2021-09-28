@@ -15,6 +15,9 @@
 using AInq.Helpers.Polly;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+#if NETSTANDARD
+using Nito.AsyncEx;
+#endif
 using Polly;
 using System;
 using System.Collections.Generic;
@@ -67,7 +70,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
         Timeout = timeout > TimeSpan.Zero ? timeout : throw new ArgumentOutOfRangeException(nameof(timeout));
         Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _logLevel = logLevel;
-        _client = new HttpClient { BaseAddress = new Uri($"https://{Portal}/rest/") };
+        _client = new HttpClient {BaseAddress = new Uri($"https://{Portal}/rest/")};
         _requestPolicy = Policy.WrapAsync(maxTransientRetry switch
             {
                 -1 => HttpRetryPolicies.TransientRetryAsyncPolicy(),
@@ -87,9 +90,6 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             : HttpRetryPolicies.TransientRetryAsyncPolicy();
     }
 
-    private TimeSpan TimeoutProvider(int attempt)
-        => TimeSpan.FromTicks(Timeout.Ticks * attempt * attempt);
-
     Task<JToken> IBitrix24Client.GetAsync(string method, CancellationToken cancellation)
         => GetRequestAsync(method, cancellation);
 
@@ -99,10 +99,13 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     void IDisposable.Dispose()
         => _client.Dispose();
 
+    private TimeSpan TimeoutProvider(int attempt)
+        => TimeSpan.FromTicks(Timeout.Ticks * attempt * attempt);
+
     /// <inheritdoc cref="IBitrix24Client.GetAsync" />
     protected virtual async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)
     {
-        using var scope = Logger.BeginScope(new Dictionary<string, object> { { "Bitrix24 Method", method } });
+        using var scope = Logger.BeginScope(new Dictionary<string, object> {{"Bitrix24 Method", method}});
         await InitAsync(cancellation).ConfigureAwait(false);
         string result;
         HttpStatusCode status;
@@ -111,11 +114,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             using var response = await _requestPolicy.GetAsync(_client, method, Logger, cancellation, requestLogLevel: _logLevel)
                                                      .ConfigureAwait(false);
             status = response.StatusCode;
-#if NET5_0
-            result = await response.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false);
-#else
-            result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-#endif
+            result = await ReadHttpResponse(response, cancellation).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -134,9 +133,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
                 Logger.LogError(ex, "Response parsing failed");
                 throw new Bitrix24CallException(method, "Error parsing response", ex);
             }
-        var exception = new Bitrix24CallException(method);
-        exception.Data["Status"] = status;
-        exception.Data["Response"] = result;
+        var exception = new Bitrix24CallException(method) {Data = {["Status"] = status, ["Response"] = result}};
         Logger.LogError(exception, "Request error");
         throw exception;
     }
@@ -144,7 +141,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     /// <inheritdoc cref="IBitrix24Client.PostAsync" />
     protected virtual async Task<JToken> PostRequestAsync(string method, JToken data, CancellationToken cancellation = default)
     {
-        using var scope = Logger.BeginScope(new Dictionary<string, object> { { "Bitrix24 Method", method } });
+        using var scope = Logger.BeginScope(new Dictionary<string, object> {{"Bitrix24 Method", method}});
         await InitAsync(cancellation).ConfigureAwait(false);
         string result;
         HttpStatusCode status;
@@ -154,11 +151,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             using var response = await _requestPolicy.PostAsync(_client, method, content, Logger, cancellation, requestLogLevel: _logLevel)
                                                      .ConfigureAwait(false);
             status = response.StatusCode;
-#if NET5_0
-            result = await response.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false);
-#else
-            result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-#endif
+            result = await ReadHttpResponse(response, cancellation).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -177,9 +170,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
                 Logger.LogError(ex, "Response parsing failed");
                 throw new Bitrix24CallException(method, "Error parsing response", ex);
             }
-        var exception = new Bitrix24CallException(method);
-        exception.Data["Status"] = status;
-        exception.Data["Response"] = result;
+        var exception = new Bitrix24CallException(method) {Data = {["Status"] = status, ["Response"] = result}};
         Logger.LogError(exception, "Request error");
         throw exception;
     }
@@ -212,11 +203,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             Logger.LogError("Authorization failed with {Code}", result.StatusCode);
             return false;
         }
-#if NET5_0
-        var data = JToken.Parse(await result.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false));
-#else
-        var data = JToken.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
-#endif
+        var data = JToken.Parse(await ReadHttpResponse(result, cancellation).ConfigureAwait(false));
         await SetTokenAsync(data).ConfigureAwait(false);
         Logger.Log(_logLevel, "Authorization success");
         return true;
@@ -239,11 +226,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             Logger.LogWarning("Token refresh failed with {Code}", result.StatusCode);
             return false;
         }
-#if NET5_0
-        var data = JToken.Parse(await result.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false));
-#else
-        var data = JToken.Parse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
-#endif
+        var data = JToken.Parse(await ReadHttpResponse(result, cancellation).ConfigureAwait(false));
         await SetTokenAsync(data).ConfigureAwait(false);
         Logger.Log(_logLevel, "Token refresh success");
         return true;
@@ -268,6 +251,13 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             else await AuthAsync(cancellation).ConfigureAwait(false);
         }
     }
+
+    private static async ValueTask<string> ReadHttpResponse(HttpResponseMessage response, CancellationToken cancellation)
+#if NET5_0_OR_GREATER
+        => await response.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false);
+#else
+        => await response.Content.ReadAsStringAsync().WaitAsync(cancellation).ConfigureAwait(false);
+#endif
 
     /// <summary> Obtain OAuth Authorization Code </summary>
     /// <param name="cancellation"> Cancellation token </param>
