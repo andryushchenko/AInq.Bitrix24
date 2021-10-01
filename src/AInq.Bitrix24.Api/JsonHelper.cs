@@ -12,13 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Optional;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Linq;
-
-namespace AInq.Bitrix24
-{
+namespace AInq.Bitrix24;
 
 /// <summary> JSON data reading methods to handle some strange Bitrix24 behaviour </summary>
 public static class JsonHelper
@@ -50,7 +44,7 @@ public static class JsonHelper
             JTokenType.String => int.TryParse(token.Value<string>(), out var result)
                 ? Maybe.Value(result)
                 : Maybe.None<int>(),
-            JTokenType.Float => Maybe.Value((int)token.Value<float>()),
+            JTokenType.Float => Maybe.Value((int) token.Value<float>()),
             _ => Maybe.None<int>()
         };
 
@@ -70,11 +64,11 @@ public static class JsonHelper
                                 && token.Any(item => item.Type is not (JTokenType.Integer or JTokenType.Float or JTokenType.String))
                 ? Array.Empty<int>()
                 : token.Select(item => item.TryGetInt()).Values().ToArray(),
-            JTokenType.Integer => new[] { token.Value<int>() },
+            JTokenType.Integer => new[] {token.Value<int>()},
             JTokenType.String => int.TryParse(token.Value<string>(), out var result)
-                ? new[] { result }
+                ? new[] {result}
                 : Array.Empty<int>(),
-            JTokenType.Float => new[] { (int)token.Value<float>() },
+            JTokenType.Float => new[] {(int) token.Value<float>()},
             _ => Array.Empty<int>()
         };
 
@@ -105,6 +99,4 @@ public static class JsonHelper
     /// <param name="paramName"> Property name </param>
     public static Maybe<bool> TryGetBool(this JToken token, string paramName)
         => token[paramName]?.TryGetBool() ?? Maybe.None<bool>();
-}
-
 }

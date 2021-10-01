@@ -1,31 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0;net6.0</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Product>AInq.Bitrix24</Product>
-    <RootNamespace>AInq.Bitrix24</RootNamespace>
-    <Authors>Anton Andryushchenko</Authors>
-    <RepositoryUrl>https://github.com/andryushchenko/AInq.Bitrix24</RepositoryUrl>
-    <Copyright>Anton Andryushchenko</Copyright>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-    <Version>2.1.0-preview.3</Version>
-    <LangVersion>preview</LangVersion>
-    <Nullable>enable</Nullable>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>Base client for Bitrix24 Rest API</Description>
-    <PackageReleaseNotes>[ADD] .NET 6.0 support</PackageReleaseNotes>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net5.0;net6.0</TargetFrameworks>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<Product>AInq.Bitrix24</Product>
+		<RootNamespace>AInq.Bitrix24</RootNamespace>
+		<Authors>Anton Andryushchenko</Authors>
+		<RepositoryUrl>https://github.com/andryushchenko/AInq.Bitrix24</RepositoryUrl>
+		<Copyright>Anton Andryushchenko</Copyright>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
+		<Version>2.1.0-preview.3</Version>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<Description>Base client for Bitrix24 Rest API</Description>
+		<PackageReleaseNotes>[ADD] .NET 6.0 support</PackageReleaseNotes>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>..\..\doc\AInq.Bitrix24.Abstraction.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DocumentationFile>..\..\doc\AInq.Bitrix24.Abstraction.xml</DocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
 
 </Project>

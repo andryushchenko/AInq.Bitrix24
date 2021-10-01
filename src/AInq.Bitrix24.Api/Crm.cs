@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
-namespace AInq.Bitrix24
-{
+namespace AInq.Bitrix24;
 
 /// <summary> Bitrix24 CRM Api calls </summary>
 public class Crm
@@ -49,6 +46,4 @@ public class Crm
         Company.ResetCache();
         Deal.ResetCache();
     }
-}
-
 }

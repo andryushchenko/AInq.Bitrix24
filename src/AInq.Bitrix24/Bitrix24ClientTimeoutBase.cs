@@ -12,15 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using Nito.AsyncEx;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Bitrix24
-{
+namespace AInq.Bitrix24;
 
 /// <summary> Bitrix24 REST API client base with request timeout control </summary>
 public abstract class Bitrix24ClientTimeoutBase : Bitrix24ClientBase
@@ -47,6 +39,4 @@ public abstract class Bitrix24ClientTimeoutBase : Bitrix24ClientBase
         _delay = Task.Delay(Timeout, default);
         return await base.PostRequestAsync(method, data, cancellation).ConfigureAwait(false);
     }
-}
-
 }

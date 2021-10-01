@@ -13,23 +13,12 @@
 // limitations under the License.
 
 using AInq.Helpers.Polly;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-#if NETSTANDARD
-using Nito.AsyncEx;
-#endif
 using Polly;
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Bitrix24
-{
+namespace AInq.Bitrix24;
 
 /// <summary> Bitrix24 REST API client base </summary>
 public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
@@ -282,6 +271,4 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
 
     /// <summary> Remove Refresh token from persistent storage </summary>
     protected abstract ValueTask RemoveRefreshToken();
-}
-
 }

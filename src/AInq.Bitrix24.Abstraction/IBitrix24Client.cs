@@ -13,11 +13,8 @@
 // limitations under the License.
 
 using Newtonsoft.Json.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Bitrix24
-{
+namespace AInq.Bitrix24;
 
 /// <summary> Bitrix24 REST API client interface </summary>
 public interface IBitrix24Client
@@ -32,6 +29,4 @@ public interface IBitrix24Client
     /// <param name="data"> Call data </param>
     /// <param name="cancellation"> Cancellation token </param>
     Task<JToken> PostAsync(string method, JToken data, CancellationToken cancellation = default);
-}
-
 }

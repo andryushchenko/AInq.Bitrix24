@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Runtime.Serialization;
 
-namespace AInq.Bitrix24
-{
+namespace AInq.Bitrix24;
 
 /// <summary> Bitrix24 REST API call exception  </summary>
 [Serializable]
@@ -49,6 +47,4 @@ public class Bitrix24CallException : Exception
 
     /// <summary>  REST API method name </summary>
     public string Method { get; } = string.Empty;
-}
-
 }
