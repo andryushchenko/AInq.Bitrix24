@@ -44,7 +44,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
 
     /// <param name="portal"> Bitrix24 portal </param>
     /// <param name="clientId"> OAuth application Client ID </param>
-    /// <param name="clientSecret"> OAuth application Client Secret</param>
+    /// <param name="clientSecret"> OAuth application Client Secret </param>
     /// <param name="logger"> Logger instance </param>
     /// <param name="timeout"> Request timeout </param>
     /// <param name="maxTransientRetry"> Maximum retry count on transient HTTP errors (-1 for retry forever) </param>
@@ -256,7 +256,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     protected abstract ValueTask<string> GetAccessToken();
 
     /// <summary> Save Access token to persistent storage </summary>
-    /// <param name="token"> Access token</param>
+    /// <param name="token"> Access token </param>
     protected abstract ValueTask StoreAccessToken(string token);
 
     /// <summary> Remove Access token from persistent storage </summary>
@@ -266,7 +266,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     protected abstract ValueTask<string> GetRefreshToken();
 
     /// <summary> Save Refresh token to persistent storage </summary>
-    /// <param name="token"> Refresh token</param>
+    /// <param name="token"> Refresh token </param>
     protected abstract ValueTask StoreRefreshToken(string token);
 
     /// <summary> Remove Refresh token from persistent storage </summary>

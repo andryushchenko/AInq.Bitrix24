@@ -16,7 +16,7 @@ using System.Runtime.Serialization;
 
 namespace AInq.Bitrix24;
 
-/// <summary> Bitrix24 REST API call exception  </summary>
+/// <summary> Bitrix24 REST API call exception </summary>
 [Serializable]
 public class Bitrix24CallException : Exception
 {
@@ -45,6 +45,6 @@ public class Bitrix24CallException : Exception
     /// <inheritdoc />
     protected Bitrix24CallException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-    /// <summary>  REST API method name </summary>
+    /// <summary> REST API method name </summary>
     public string Method { get; } = string.Empty;
 }

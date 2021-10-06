@@ -22,7 +22,7 @@
         <member name="M:AInq.Bitrix24.Bitrix24ClientBase.#ctor(System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger{AInq.Bitrix24.IBitrix24Client},System.TimeSpan,System.Int32,System.Int32,Microsoft.Extensions.Logging.LogLevel)">
             <param name="portal"> Bitrix24 portal </param>
             <param name="clientId"> OAuth application Client ID </param>
-            <param name="clientSecret"> OAuth application Client Secret</param>
+            <param name="clientSecret"> OAuth application Client Secret </param>
             <param name="logger"> Logger instance </param>
             <param name="timeout"> Request timeout </param>
             <param name="maxTransientRetry"> Maximum retry count on transient HTTP errors (-1 for retry forever) </param>
@@ -44,7 +44,7 @@
         </member>
         <member name="M:AInq.Bitrix24.Bitrix24ClientBase.StoreAccessToken(System.String)">
             <summary> Save Access token to persistent storage </summary>
-            <param name="token"> Access token</param>
+            <param name="token"> Access token </param>
         </member>
         <member name="M:AInq.Bitrix24.Bitrix24ClientBase.RemoveAccessToken">
             <summary> Remove Access token from persistent storage </summary>
@@ -54,7 +54,7 @@
         </member>
         <member name="M:AInq.Bitrix24.Bitrix24ClientBase.StoreRefreshToken(System.String)">
             <summary> Save Refresh token to persistent storage </summary>
-            <param name="token"> Refresh token</param>
+            <param name="token"> Refresh token </param>
         </member>
         <member name="M:AInq.Bitrix24.Bitrix24ClientBase.RemoveRefreshToken">
             <summary> Remove Refresh token from persistent storage </summary>
