@@ -2,9 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<Product>AInq.Bitrix24</Product>
 		<Authors>Anton Andryushchenko</Authors>
 		<RepositoryUrl>https://github.com/andryushchenko/AInq.Bitrix24</RepositoryUrl>
@@ -17,7 +14,6 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<Description>Base client for Bitrix24 Rest API</Description>
-		<PackageReleaseNotes>[ADD] .NET 6.0 support</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
