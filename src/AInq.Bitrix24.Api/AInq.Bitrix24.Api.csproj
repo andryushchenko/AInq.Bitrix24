@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netstandard2.1;net5.0;net6.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -12,7 +12,7 @@
 		<Copyright>Anton Andryushchenko</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-		<Version>0.0.2-preview.3</Version>
+		<Version>0.0.2-preview.5</Version>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -34,8 +34,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AInq.Helpers.Linq" Version="1.1.0-preview.2" />
-		<PackageReference Include="AInq.Optional" Version="1.1.0-preview.2" />
+		<PackageReference Include="AInq.Helpers.Linq" Version="1.2.0-preview.5" />
+		<PackageReference Include="AInq.Optional" Version="1.1.0-preview.3" />
 	</ItemGroup>
 
 	<ItemGroup>
