@@ -20,7 +20,8 @@ public class Crm
     /// <param name="client"> API Client </param>
     public Crm(IBitrix24Client client)
     {
-        Lead = new CrmEntity("lead", client ?? throw new ArgumentNullException(nameof(client)));
+        _ = client ?? throw new ArgumentNullException(nameof(client));
+        Lead = new CrmEntity("lead", client);
         Contact = new CrmEntity("contact", client);
         Company = new CrmEntity("company", client);
         Deal = new CrmEntity("deal", client);

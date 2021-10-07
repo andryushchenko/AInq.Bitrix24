@@ -94,6 +94,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     /// <inheritdoc cref="IBitrix24Client.GetAsync" />
     protected virtual async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)
     {
+        if (string.IsNullOrWhiteSpace(method)) throw new ArgumentNullException(nameof(method));
         using var scope = Logger.BeginScope(new Dictionary<string, object> {{"Bitrix24 Method", method}});
         await InitAsync(cancellation).ConfigureAwait(false);
         string result;
@@ -130,6 +131,8 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     /// <inheritdoc cref="IBitrix24Client.PostAsync" />
     protected virtual async Task<JToken> PostRequestAsync(string method, JToken data, CancellationToken cancellation = default)
     {
+        if (string.IsNullOrWhiteSpace(method)) throw new ArgumentNullException(nameof(method));
+        _ = data ?? throw new ArgumentNullException(nameof(data));
         using var scope = Logger.BeginScope(new Dictionary<string, object> {{"Bitrix24 Method", method}});
         await InitAsync(cancellation).ConfigureAwait(false);
         string result;
