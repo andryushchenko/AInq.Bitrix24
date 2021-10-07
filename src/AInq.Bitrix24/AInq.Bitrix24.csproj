@@ -21,7 +21,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AInq.Helpers.Polly" Version="1.2.0-preview.5" />
+		<PackageReference Include="AInq.Helpers.Polly" Version="2.0.0-rc.1" />
 		<PackageReference Include="Nito.AsyncEx.Tasks" Version="5.1.2" />
 	</ItemGroup>
 

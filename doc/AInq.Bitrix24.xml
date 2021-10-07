@@ -60,7 +60,7 @@
             <summary> Remove Refresh token from persistent storage </summary>
         </member>
         <member name="T:AInq.Bitrix24.Bitrix24ClientTimeoutBase">
-            <summary> Bitrix24 REST API client base with request timeout control </summary>
+            <summary> Bitrix24 REST API client with basic request timeout control (NOT thread safe) </summary>
         </member>
         <member name="M:AInq.Bitrix24.Bitrix24ClientTimeoutBase.#ctor(System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger{AInq.Bitrix24.IBitrix24Client},System.TimeSpan,System.Int32,System.Int32,Microsoft.Extensions.Logging.LogLevel)">
             <inheritdoc />

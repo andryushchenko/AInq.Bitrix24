@@ -14,7 +14,7 @@
 
 namespace AInq.Bitrix24;
 
-/// <summary> Bitrix24 REST API client base with request timeout control </summary>
+/// <summary> Bitrix24 REST API client with basic request timeout control (NOT thread safe) </summary>
 public abstract class Bitrix24ClientTimeoutBase : Bitrix24ClientBase
 {
     private Task _delay = Task.CompletedTask;

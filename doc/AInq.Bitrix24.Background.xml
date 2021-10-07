@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AInq.Bitrix24.Background</name>
+    </assembly>
+    <members>
+        <member name="T:AInq.Bitrix24.Bitrix24Injection">
+            <summary> Bitrix24 client dependency injection </summary>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24Injection.AddBitrix24Service(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Bitrix24.IBitrix24Client,System.TimeSpan)">
+            <summary> Add Bitrix24 client as background service </summary>
+            <param name="services"> Service collection </param>
+            <param name="client"> Bitrix24 client instance </param>
+            <param name="timeout"> Request timeout </param>
+            <remarks> DO NOT use client implementations with internal timeout control </remarks>
+            <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="client" /> is NULL </exception>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24Injection.AddBitrix24Service``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.TimeSpan)">
+            <summary> Add Bitrix24 client as background service </summary>
+            <param name="services"> Service collection </param>
+            <param name="timeout"> Request timeout </param>
+            <typeparam name="TClient"> Bitrix24 client type </typeparam>
+            <remarks> DO NOT use client implementations with internal timeout control </remarks>
+            <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24Injection.AddBitrix24Service(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,AInq.Bitrix24.IBitrix24Client},System.TimeSpan)">
+            <summary> Add Bitrix24 client as background service </summary>
+            <param name="services"> Service collection </param>
+            <param name="clientFactory"> Bitrix24 client factory </param>
+            <param name="timeout"> Request timeout </param>
+            <remarks> DO NOT use client implementations with internal timeout control </remarks>
+            <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="clientFactory" /> is NULL </exception>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24Injection.AddBitrix24PriorityService(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Bitrix24.IBitrix24Client,System.TimeSpan,System.Int32)">
+            <summary> Add Bitrix24 client as background service with prioritization </summary>
+            <param name="services"> Service collection </param>
+            <param name="client"> Bitrix24 client instance </param>
+            <param name="timeout"> Request timeout </param>
+            <param name="maxPriority"> Max allowed operation priority </param>
+            <remarks> DO NOT use client implementations with internal timeout control </remarks>
+            <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="client" /> is NULL </exception>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24Injection.AddBitrix24PriorityService``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.TimeSpan,System.Int32)">
+            <summary> Add Bitrix24 client as background service with prioritization </summary>
+            <param name="services"> Service collection </param>
+            <param name="timeout"> Request timeout </param>
+            <param name="maxPriority"> Max allowed operation priority </param>
+            <typeparam name="TClient"> Bitrix24 client type </typeparam>
+            <remarks> DO NOT use client implementations with internal timeout control </remarks>
+            <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24Injection.AddBitrix24PriorityService(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,AInq.Bitrix24.IBitrix24Client},System.TimeSpan,System.Int32)">
+            <summary> Add Bitrix24 client as background service with prioritization </summary>
+            <param name="services"> Service collection </param>
+            <param name="clientFactory"> Bitrix24 client factory </param>
+            <param name="timeout"> Request timeout </param>
+            <param name="maxPriority"> Max allowed operation priority </param>
+            <remarks> DO NOT use client implementations with internal timeout control </remarks>
+            <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="clientFactory" /> is NULL </exception>
+        </member>
+        <member name="T:AInq.Bitrix24.Bitrix24PriorityService">
+            <summary> Bitrix24 client service with prioritization </summary>
+        </member>
+        <member name="P:AInq.Bitrix24.Bitrix24PriorityService.MaxPriority">
+            <summary> Max allowed operation priority </summary>
+        </member>
+        <member name="M:AInq.Bitrix24.Bitrix24PriorityService.GetPriorityClient(System.Int32)">
+            <summary> Create <see cref="T:AInq.Bitrix24.IBitrix24Client" /> proxy-client instance with given <paramref name="priority" /> </summary>
+            <param name="priority"> Operation priority </param>
+        </member>
+    </members>
+</doc>

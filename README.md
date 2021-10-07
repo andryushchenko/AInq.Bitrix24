@@ -20,10 +20,23 @@ Split interface, implementation and high-level method calls (in future) to separ
 Base client implementation with GET/POST method calls, authentication and request-per-second limit (only in `Bitrix24ClientTimeoutBase`).
 Provided client are abstract: methods to interact with some persistent storage (for access and refresh tokens) and to obtain OAuth authentication code should be implemented.
 
-## Future development
+#### [![Nuget](https://img.shields.io/nuget/v/AInq.Bitrix24.Background)](https://www.nuget.org/packages/AInq.Bitrix24.Background/) AInq.Bitrix24.Background
 
-High-level API methods will be added as extension methods for `IBitrix24Client` interface in separate packages.
+Integration with [AInq.Background](https://github.com/andryushchenko/AInq.Background) conveyour.
+DO NOT use `IBitrix24Client` implementations with internal timeout control with this package.
+
+#### [![Nuget](https://img.shields.io/nuget/v/AInq.Bitrix24.Api)](https://www.nuget.org/packages/AInq.Bitrix24.Background/) AInq.Bitrix24.Api
+
+High-level API methods will be added here.
+
+**Currently avaliable:**
+- Get, List, Update, Create, Delete methods for basic CRM entyties (lead, deal, contact, company)
+
 There is currently no plan to implement all API methods, first priority is [CRM](https://dev.1c-bitrix.ru/rest_help/crm/index.php) methods implementation.
+
+***Дальнейшая разработка***
+
+Даннай пакет будет дополняться методами общего назначения по мере того, как их реализации будут стабилизироваться и тестироваться в реальном приложении, находящемся сейчас в активной разработке. Разработка ведется с учетом реально встречающегося странного поведения API Битрикс24 (например отдача значения `false` в необязательных пользовательских полях числовых типов). Функциональность иногда приносится в жертву надежности, API может отличаться от официального. Таков путь.
 
 ## Documentation
 
