@@ -24,13 +24,13 @@ internal sealed class Bitrix24PriorityService : IBitrix24Client, IBitrix24Priori
     internal Bitrix24PriorityService(IPriorityConveyor<(string, JToken?), JToken> conveyor)
         => _conveyor = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
 
-    int IBitrix24PriorityService.MaxPriority => _conveyor.MaxPriority;
-
     async Task<JToken> IBitrix24Client.GetAsync(string method, CancellationToken cancellation)
         => await _conveyor.ProcessDataAsync((method, null), cancellation);
 
     async Task<JToken> IBitrix24Client.PostAsync(string method, JToken data, CancellationToken cancellation)
         => await _conveyor.ProcessDataAsync((method, data), cancellation);
+
+    int IBitrix24PriorityService.MaxPriority => _conveyor.MaxPriority;
 
     IBitrix24Client IBitrix24PriorityService.GetPriorityClient(int priority)
         => new Bitrix24PriorityProxy(this, Math.Min(_conveyor.MaxPriority, Math.Max(0, priority)));

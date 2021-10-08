@@ -14,7 +14,7 @@
 
 namespace AInq.Bitrix24;
 
-/// <summary> Bitrix24 client prioritization service interface</summary>
+/// <summary> Bitrix24 client prioritization service interface </summary>
 public interface IBitrix24PriorityService
 {
     /// <summary> Max allowed operation priority </summary>

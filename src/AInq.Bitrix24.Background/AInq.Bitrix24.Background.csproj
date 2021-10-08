@@ -22,7 +22,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="AInq.Background" Version="5.0.0-rc.1" />
+		<PackageReference Include="AInq.Background" Version="5.0.0-rc.1" />
 	</ItemGroup>
 
 	<ItemGroup>
