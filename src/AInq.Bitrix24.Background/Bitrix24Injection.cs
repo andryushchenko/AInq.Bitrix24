@@ -93,9 +93,8 @@ public static class Bitrix24Injection
             throw new InvalidOperationException("Service already exists");
         if (timeout < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(timeout));
         _ = client ?? throw new ArgumentNullException(nameof(client));
-        return services.AddSingleton(new Bitrix24PriorityService(
-                           services.CreatePriorityConveyor(new Bitrix24ConveyorMachine(client, timeout), maxPriority, 1)))
-                       .AddSingleton<IBitrix24Client>(provider => provider.GetRequiredService<Bitrix24PriorityService>());
+        var service = new Bitrix24PriorityService(services.CreatePriorityConveyor(new Bitrix24ConveyorMachine(client, timeout), maxPriority, 1));
+        return services.AddSingleton<IBitrix24PriorityService>(service).AddSingleton<IBitrix24Client>(service);
     }
 
     /// <summary> Add Bitrix24 client as background service with prioritization </summary>
@@ -112,12 +111,12 @@ public static class Bitrix24Injection
         if (services.Any(service => service.ImplementationType == typeof(IBitrix24Client)))
             throw new InvalidOperationException("Service already exists");
         if (timeout < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(timeout));
-        return services.AddSingleton(new Bitrix24PriorityService(services.CreatePriorityConveyor(
-                           provider => new Bitrix24ConveyorMachine(provider.GetRequiredService<TClient>(), timeout),
-                           ReuseStrategy.Static,
-                           maxPriority: maxPriority,
-                           maxAttempts: 1)))
-                       .AddSingleton<IBitrix24Client>(provider => provider.GetRequiredService<Bitrix24PriorityService>());
+        var service = new Bitrix24PriorityService(services.CreatePriorityConveyor(
+            provider => new Bitrix24ConveyorMachine(provider.GetRequiredService<TClient>(), timeout),
+            ReuseStrategy.Static,
+            maxPriority: maxPriority,
+            maxAttempts: 1));
+        return services.AddSingleton<IBitrix24PriorityService>(service).AddSingleton<IBitrix24Client>(service);
     }
 
     /// <summary> Add Bitrix24 client as background service with prioritization </summary>
@@ -137,11 +136,11 @@ public static class Bitrix24Injection
             throw new InvalidOperationException("Service already exists");
         if (timeout < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(timeout));
         _ = clientFactory ?? throw new ArgumentNullException(nameof(clientFactory));
-        return services.AddSingleton(new Bitrix24PriorityService(services.CreatePriorityConveyor(
-                           provider => new Bitrix24ConveyorMachine(clientFactory.Invoke(provider), timeout),
-                           ReuseStrategy.Static,
-                           maxPriority: maxPriority,
-                           maxAttempts: 1)))
-                       .AddSingleton<IBitrix24Client>(provider => provider.GetRequiredService<Bitrix24PriorityService>());
+        var service = new Bitrix24PriorityService(services.CreatePriorityConveyor(
+            provider => new Bitrix24ConveyorMachine(clientFactory.Invoke(provider), timeout),
+            ReuseStrategy.Static,
+            maxPriority: maxPriority,
+            maxAttempts: 1));
+        return services.AddSingleton<IBitrix24PriorityService>(service).AddSingleton<IBitrix24Client>(service);
     }
 }

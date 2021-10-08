@@ -17,15 +17,14 @@ using AInq.Background.Services;
 namespace AInq.Bitrix24;
 
 /// <summary> Bitrix24 client service with prioritization </summary>
-public sealed class Bitrix24PriorityService : IBitrix24Client
+internal sealed class Bitrix24PriorityService : IBitrix24Client, IBitrix24PriorityService
 {
     private readonly IPriorityConveyor<(string, JToken?), JToken> _conveyor;
 
     internal Bitrix24PriorityService(IPriorityConveyor<(string, JToken?), JToken> conveyor)
         => _conveyor = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
 
-    /// <summary> Max allowed operation priority </summary>
-    public int MaxPriority => _conveyor.MaxPriority;
+    int IBitrix24PriorityService.MaxPriority => _conveyor.MaxPriority;
 
     async Task<JToken> IBitrix24Client.GetAsync(string method, CancellationToken cancellation)
         => await _conveyor.ProcessDataAsync((method, null), cancellation);
@@ -33,9 +32,7 @@ public sealed class Bitrix24PriorityService : IBitrix24Client
     async Task<JToken> IBitrix24Client.PostAsync(string method, JToken data, CancellationToken cancellation)
         => await _conveyor.ProcessDataAsync((method, data), cancellation);
 
-    /// <summary> Create <see cref="IBitrix24Client" /> proxy-client instance with given <paramref name="priority" /> </summary>
-    /// <param name="priority"> Operation priority </param>
-    public IBitrix24Client GetPriorityClient(int priority)
+    IBitrix24Client IBitrix24PriorityService.GetPriorityClient(int priority)
         => new Bitrix24PriorityProxy(this, Math.Min(_conveyor.MaxPriority, Math.Max(0, priority)));
 
     private class Bitrix24PriorityProxy : IBitrix24Client
