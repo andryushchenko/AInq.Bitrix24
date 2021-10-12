@@ -44,7 +44,7 @@
             <param name="cancellation"> Cancellation token </param>
         </member>
         <member name="T:AInq.Bitrix24.IBitrix24PriorityService">
-            <summary> Bitrix24 client prioritization service interface</summary>
+            <summary> Bitrix24 client prioritization service interface </summary>
         </member>
         <member name="P:AInq.Bitrix24.IBitrix24PriorityService.MaxPriority">
             <summary> Max allowed operation priority </summary>

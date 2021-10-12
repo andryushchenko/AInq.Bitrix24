@@ -9,11 +9,12 @@
 		<Copyright>Anton Andryushchenko</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-		<Version>3.0.0-rc.1.1</Version>
+		<Version>3.0.0-rc.2</Version>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageTags>Bitrix24;Background;AInq</PackageTags>
 		<Description>Bitrix24 client integration with AInq.Background</Description>
 	</PropertyGroup>
 
@@ -22,7 +23,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AInq.Background" Version="5.0.0-rc.1" />
+		<PackageReference Include="AInq.Background" Version="5.0.0-rc.2" />
 	</ItemGroup>
 
 	<ItemGroup>
