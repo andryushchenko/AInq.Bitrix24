@@ -96,7 +96,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     {
         if (string.IsNullOrWhiteSpace(method)) throw new ArgumentNullException(nameof(method));
         using var scope = Logger.BeginScope(new Dictionary<string, object> {{"Bitrix24 Method", method}});
-        await InitAsync(cancellation).ConfigureAwait(false);
+        await CheckAsync(cancellation).ConfigureAwait(false);
         string result;
         HttpStatusCode status;
         try
@@ -134,7 +134,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
         if (string.IsNullOrWhiteSpace(method)) throw new ArgumentNullException(nameof(method));
         _ = data ?? throw new ArgumentNullException(nameof(data));
         using var scope = Logger.BeginScope(new Dictionary<string, object> {{"Bitrix24 Method", method}});
-        await InitAsync(cancellation).ConfigureAwait(false);
+        await CheckAsync(cancellation).ConfigureAwait(false);
         string result;
         HttpStatusCode status;
         try
@@ -233,15 +233,15 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", access);
     }
 
-    private async ValueTask InitAsync(CancellationToken cancellation)
+    private ValueTask CheckAsync(CancellationToken cancellation)
+        => _client.DefaultRequestHeaders.Authorization != null ? default : new ValueTask(InitAsync(cancellation));
+
+    private async Task InitAsync(CancellationToken cancellation)
     {
-        if (_client.DefaultRequestHeaders.Authorization == null)
-        {
-            var accessToken = await GetAccessToken().ConfigureAwait(false);
-            if (!string.IsNullOrWhiteSpace(accessToken))
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            else await AuthAsync(cancellation).ConfigureAwait(false);
-        }
+        var accessToken = await GetAccessToken().ConfigureAwait(false);
+        if (!string.IsNullOrWhiteSpace(accessToken))
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        else await AuthAsync(cancellation).ConfigureAwait(false);
     }
 
     private static async ValueTask<string> ReadHttpResponse(HttpResponseMessage response, CancellationToken cancellation)

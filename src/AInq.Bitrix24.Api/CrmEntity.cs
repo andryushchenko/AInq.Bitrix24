@@ -173,4 +173,37 @@ public class CrmEntity
             data.Property(">ID")!.Value = result.Max(item => item.Value<int>("ID"));
         }
     }
+
+    /// <summary> List entities </summary>
+    /// <param name="filter"> Filter </param>
+    /// <param name="cancellation"> Cancellation token </param>
+    public async IAsyncEnumerable<JToken> ListAsync(JObject filter, [EnumeratorCancellation] CancellationToken cancellation = default)
+    {
+        var data = ((filter ?? throw new ArgumentNullException(nameof(filter))).DeepClone() as JObject)!;
+        if (!data.ContainsKey(">ID"))
+            data.Add(">ID", 0);
+        var request = new JObject
+        {
+            {"order", new JObject {{"ID", "ASC"}}},
+            {"filter", data},
+            {
+                "select", new JArray((await FieldsAsync(cancellation).ConfigureAwait(false))
+                                     .Cast<JProperty>()
+                                     .Where(property => property.Value.TryGetBool("isMultiple").ValueOrDefault(false))
+                                     .Select(property => property.Name)
+                                     .Prepend("UF_*")
+                                     .Prepend("*"))
+            },
+            {"start", -1}
+        };
+        while (true)
+        {
+            if ((await Client.PostAsync($"crm.{Type}.list", request, cancellation))["result"] is not JArray result
+                || result.Count == 0) yield break;
+            foreach (var item in result)
+                yield return item.DeepClone();
+            if (result.Count < 50) yield break;
+            data.Property(">ID")!.Value = result.Max(item => item.Value<int>("ID"));
+        }
+    }
 }

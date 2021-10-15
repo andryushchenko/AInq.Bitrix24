@@ -76,6 +76,11 @@
             <param name="select"> Requested fields </param>
             <param name="cancellation"> Cancellation token </param>
         </member>
+        <member name="M:AInq.Bitrix24.CrmEntity.ListAsync(Newtonsoft.Json.Linq.JObject,System.Threading.CancellationToken)">
+            <summary> List entities </summary>
+            <param name="filter"> Filter </param>
+            <param name="cancellation"> Cancellation token </param>
+        </member>
         <member name="T:AInq.Bitrix24.JsonHelper">
             <summary> JSON data reading methods to handle some strange Bitrix24 behaviour </summary>
         </member>

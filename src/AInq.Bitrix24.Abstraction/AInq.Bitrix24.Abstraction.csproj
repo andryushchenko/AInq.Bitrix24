@@ -9,13 +9,14 @@
 		<Copyright>Anton Andryushchenko</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-		<Version>3.0.0-rc.2</Version>
+		<Version>3.0.0-rc.2.1</Version>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>Bitrix24;AInq</PackageTags>
 		<Description>Base client for Bitrix24 Rest API</Description>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -24,6 +25,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>
