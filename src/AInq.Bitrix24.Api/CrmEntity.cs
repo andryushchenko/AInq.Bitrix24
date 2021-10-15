@@ -42,7 +42,7 @@ public class CrmEntity
     /// <summary> Get entity fields info </summary>
     /// <param name="cancellation"> Cancellation token </param>
     public async Task<JToken> FieldsAsync(CancellationToken cancellation = default)
-        => Fields ??= await Client.GetAsync($"crm.{Type}.fields", cancellation).ConfigureAwait(false);
+        => Fields ??= (await Client.GetAsync($"crm.{Type}.fields", cancellation).ConfigureAwait(false))["result"]!;
 
     /// <summary> Get entity by Id </summary>
     /// <param name="id"> Id </param>
