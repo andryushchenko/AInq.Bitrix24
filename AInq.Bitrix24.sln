@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{3CA1228D-9
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		AInq.Bitrix24.sln.DotSettings = AInq.Bitrix24.sln.DotSettings
+		Directory.Build.props = Directory.Build.props
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -19,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Bitrix24.Abstraction",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Bitrix24.Api", "src\AInq.Bitrix24.Api\AInq.Bitrix24.Api.csproj", "{86643D22-0843-4393-BFA4-B0205B5A5BAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AInq.Bitrix24.Background", "src\AInq.Bitrix24.Background\AInq.Bitrix24.Background.csproj", "{8E8BDCB7-D214-4031-B483-2ECFA3382A60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Bitrix24.Background", "src\AInq.Bitrix24.Background\AInq.Bitrix24.Background.csproj", "{8E8BDCB7-D214-4031-B483-2ECFA3382A60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

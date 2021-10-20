@@ -1,22 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-		<Product>AInq.Bitrix24</Product>
-		<RootNamespace>AInq.Bitrix24</RootNamespace>
-		<Authors>Anton Andryushchenko</Authors>
-		<RepositoryUrl>https://github.com/andryushchenko/AInq.Bitrix24</RepositoryUrl>
-		<Copyright>Anton Andryushchenko</Copyright>
-		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-		<Version>3.0.0-rc.2.1</Version>
-		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>Bitrix24;Background;AInq</PackageTags>
 		<Description>Bitrix24 client integration with AInq.Background</Description>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -33,10 +19,6 @@
 
 	<ItemGroup>
 		<Using Include="Newtonsoft.Json.Linq" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="..\..\README.md" Pack="true" PackagePath="\"/>
 	</ItemGroup>
 
 </Project>
