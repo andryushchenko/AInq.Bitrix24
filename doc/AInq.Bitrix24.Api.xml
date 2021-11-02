@@ -122,5 +122,23 @@
             <param name="token"> JSON source </param>
             <param name="paramName"> Property name </param>
         </member>
+        <member name="M:AInq.Bitrix24.JsonHelper.GetBoolOrFalse(Newtonsoft.Json.Linq.JToken)">
+            <summary> Try get <see cref="T:System.Boolean" /> value </summary>
+            <param name="token"> JSON source </param>
+        </member>
+        <member name="M:AInq.Bitrix24.JsonHelper.GetBoolOrFalse(Newtonsoft.Json.Linq.JToken,System.String)">
+            <summary> Try get <see cref="T:System.Boolean" /> value </summary>
+            <param name="token"> JSON source </param>
+            <param name="paramName"> Property name </param>
+        </member>
+        <member name="M:AInq.Bitrix24.JsonHelper.TryGetDateTime(Newtonsoft.Json.Linq.JToken)">
+            <summary> Try get <see cref="T:System.DateTime" /> value </summary>
+            <param name="token"> JSON source </param>
+        </member>
+        <member name="M:AInq.Bitrix24.JsonHelper.TryGetDateTime(Newtonsoft.Json.Linq.JToken,System.String)">
+            <summary> Try get <see cref="T:System.DateTime" /> value </summary>
+            <param name="token"> JSON source </param>
+            <param name="paramName"> Property name </param>
+        </member>
     </members>
 </doc>
