@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using AInq.Helpers.Polly;
+using Microsoft.Extensions.Logging.Abstractions;
 using Polly;
 using System.Net;
 using System.Net.Http.Headers;
@@ -50,30 +51,30 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     /// <param name="maxTransientRetry"> Maximum retry count on transient HTTP errors (-1 for retry forever) </param>
     /// <param name="maxTimeoutRetry"> Maximum retry count on HTTP 429 (-1 for retry forever) </param>
     /// <param name="logLevel"> Request logging level </param>
-    protected Bitrix24ClientBase(string portal, string clientId, string clientSecret, ILogger<IBitrix24Client> logger, TimeSpan timeout,
-        int maxTransientRetry = -1, int maxTimeoutRetry = -1, LogLevel logLevel = LogLevel.Debug)
+    protected Bitrix24ClientBase(string portal, string clientId, string clientSecret, TimeSpan timeout, int maxTransientRetry = -1,
+        int maxTimeoutRetry = -1, ILogger<IBitrix24Client>? logger = null, LogLevel logLevel = LogLevel.Debug)
     {
         ClientId = string.IsNullOrWhiteSpace(clientId) ? throw new ArgumentOutOfRangeException(nameof(clientId)) : clientId;
         _clientSecret = string.IsNullOrWhiteSpace(clientSecret) ? throw new ArgumentOutOfRangeException(nameof(clientSecret)) : clientSecret;
         Portal = string.IsNullOrWhiteSpace(portal) ? throw new ArgumentOutOfRangeException(nameof(portal)) : portal;
         Timeout = timeout > TimeSpan.Zero ? timeout : throw new ArgumentOutOfRangeException(nameof(timeout));
-        Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        Logger = logger ?? NullLogger<IBitrix24Client>.Instance;
         _logLevel = logLevel;
         _client = new HttpClient {BaseAddress = new Uri($"https://{Portal}/rest/")};
         _requestPolicy = Policy.WrapAsync(maxTransientRetry switch
             {
                 -1 => HttpRetryPolicies.TransientRetryAsyncPolicy(),
-                >0 => HttpRetryPolicies.TransientRetryAsyncPolicy(maxTransientRetry),
+                > 0 => HttpRetryPolicies.TransientRetryAsyncPolicy(maxTransientRetry),
                 _ => throw new ArgumentOutOfRangeException(nameof(maxTransientRetry))
             },
             maxTimeoutRetry switch
             {
                 -1 => HttpRetryPolicies.TimeoutRetryAsyncPolicy(TimeoutProvider),
-                >0 => HttpRetryPolicies.TimeoutRetryAsyncPolicy(TimeoutProvider, maxTimeoutRetry),
+                > 0 => HttpRetryPolicies.TimeoutRetryAsyncPolicy(TimeoutProvider, maxTimeoutRetry),
                 _ => throw new ArgumentOutOfRangeException(nameof(maxTimeoutRetry))
             },
             Policy.HandleResult<HttpResponseMessage>(response => response.StatusCode == HttpStatusCode.Unauthorized)
-                  .RetryAsync(async (_, _, ctx) => await AuthAsync(ctx.GetCancellationToken()).ConfigureAwait(false)));
+                  .RetryAsync(1, async (_, _, ctx) => await AuthAsync(ctx.GetCancellationToken()).ConfigureAwait(false)));
         _authPolicy = maxTransientRetry > 0
             ? HttpRetryPolicies.TransientRetryAsyncPolicy(maxTransientRetry)
             : HttpRetryPolicies.TransientRetryAsyncPolicy();

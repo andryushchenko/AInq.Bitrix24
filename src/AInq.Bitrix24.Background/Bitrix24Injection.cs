@@ -129,8 +129,7 @@ public static class Bitrix24Injection
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="clientFactory" /> is NULL </exception>
     public static IServiceCollection AddBitrix24PriorityService(this IServiceCollection services,
-        Func<IServiceProvider, IBitrix24Client> clientFactory,
-        TimeSpan timeout, int maxPriority = 100)
+        Func<IServiceProvider, IBitrix24Client> clientFactory, TimeSpan timeout, int maxPriority = 100)
     {
         if (services.Any(service => service.ImplementationType == typeof(IBitrix24Client)))
             throw new InvalidOperationException("Service already exists");
