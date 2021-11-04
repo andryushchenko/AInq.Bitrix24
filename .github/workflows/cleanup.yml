@@ -17,7 +17,7 @@ jobs:
         dotnet-version: '6.0.x'
         include-prerelease: true
     - name: ReSharper tools setup
-      run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.3.0-eap05
+      run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.3.0-eap06
     - name: Code cleanup
       run: jb cleanupcode --profile=Full --properties:Configuration=Release AInq.Bitrix24.sln
     - name: Git DIFF
