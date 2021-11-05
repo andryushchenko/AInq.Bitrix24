@@ -19,7 +19,7 @@
         <member name="F:AInq.Bitrix24.Bitrix24ClientBase.Timeout">
             <summary> Request timeout </summary>
         </member>
-        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.#ctor(System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger{AInq.Bitrix24.IBitrix24Client},System.TimeSpan,System.Int32,System.Int32,Microsoft.Extensions.Logging.LogLevel)">
+        <member name="M:AInq.Bitrix24.Bitrix24ClientBase.#ctor(System.String,System.String,System.String,System.TimeSpan,System.Int32,System.Int32,Microsoft.Extensions.Logging.ILogger{AInq.Bitrix24.IBitrix24Client},Microsoft.Extensions.Logging.LogLevel)">
             <param name="portal"> Bitrix24 portal </param>
             <param name="clientId"> OAuth application Client ID </param>
             <param name="clientSecret"> OAuth application Client Secret </param>
@@ -62,7 +62,7 @@
         <member name="T:AInq.Bitrix24.Bitrix24ClientTimeoutBase">
             <summary> Bitrix24 REST API client with basic request timeout control (NOT thread safe) </summary>
         </member>
-        <member name="M:AInq.Bitrix24.Bitrix24ClientTimeoutBase.#ctor(System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger{AInq.Bitrix24.IBitrix24Client},System.TimeSpan,System.Int32,System.Int32,Microsoft.Extensions.Logging.LogLevel)">
+        <member name="M:AInq.Bitrix24.Bitrix24ClientTimeoutBase.#ctor(System.String,System.String,System.String,System.TimeSpan,System.Int32,System.Int32,Microsoft.Extensions.Logging.ILogger{AInq.Bitrix24.IBitrix24Client},Microsoft.Extensions.Logging.LogLevel)">
             <inheritdoc />
         </member>
         <member name="M:AInq.Bitrix24.Bitrix24ClientTimeoutBase.GetRequestAsync(System.String,System.Threading.CancellationToken)">
