@@ -41,8 +41,30 @@ public class CrmEntity
 
     /// <summary> Get entity fields info </summary>
     /// <param name="cancellation"> Cancellation token </param>
-    public async Task<JToken> FieldsAsync(CancellationToken cancellation = default)
+    public ValueTask<JToken> GetFieldsAsync(CancellationToken cancellation = default)
+        => Fields == null ? new ValueTask<JToken>(LoadFieldsAsync(cancellation)) : new ValueTask<JToken>(Fields);
+
+    private async Task<JToken> LoadFieldsAsync(CancellationToken cancellation = default)
         => Fields ??= (await Client.GetAsync($"crm.{Type}.fields", cancellation).ConfigureAwait(false))["result"]!;
+
+    private ValueTask<IReadOnlyCollection<string>> GetDefaultFieldsListAsync(CancellationToken cancellation = default)
+        => Fields == null
+            ? new ValueTask<IReadOnlyCollection<string>>(LoadDefaultFieldsListAsync(cancellation))
+            : new ValueTask<IReadOnlyCollection<string>>(Fields.Cast<JProperty>()
+                                                               .Where(property => property.Value.TryGetBool("isMultiple").ValueOrDefault(false))
+                                                               .Select(property => property.Name)
+                                                               .Prepend("UF_*")
+                                                               .Prepend("*")
+                                                               .ToList());
+
+    private async Task<IReadOnlyCollection<string>> LoadDefaultFieldsListAsync(CancellationToken cancellation = default)
+        => (await LoadFieldsAsync(cancellation).ConfigureAwait(false)).Cast<JProperty>()
+                                                                      .Where(property
+                                                                          => property.Value.TryGetBool("isMultiple").ValueOrDefault(false))
+                                                                      .Select(property => property.Name)
+                                                                      .Prepend("UF_*")
+                                                                      .Prepend("*")
+                                                                      .ToList();
 
     /// <summary> Get entity by Id </summary>
     /// <param name="id"> Id </param>
@@ -73,17 +95,16 @@ public class CrmEntity
     public async IAsyncEnumerable<JToken> GetAsync(IEnumerable<int> ids, [EnumeratorCancellation] CancellationToken cancellation = default)
     {
         _ = ids ?? throw new ArgumentNullException(nameof(ids));
-        var select = (await FieldsAsync(cancellation).ConfigureAwait(false))
-                     .Cast<JProperty>()
-                     .Where(property => property.Value.TryGetBool("isMultiple").ValueOrDefault(false))
-                     .Select(property => property.Name)
-                     .Prepend("UF_*")
-                     .Prepend("*")
-                     .ToList();
         foreach (var batch in ids.Where(id => id > 0).Batch(50))
         {
-            var request = new JObject {{"filter", new JObject {{"ID", new JArray(batch)}}}, {"select", new JArray(select)}, {"start", -1}};
-            if ((await Client.PostAsync($"crm.{Type}.list", request, cancellation))["result"] is not JArray result || result.Count == 0) continue;
+            var request = new JObject
+            {
+                {"filter", new JObject {{"ID", new JArray(batch)}}},
+                {"select", new JArray(await GetDefaultFieldsListAsync(cancellation).ConfigureAwait(false))},
+                {"start", -1}
+            };
+            if ((await Client.PostAsync($"crm.{Type}.list", request, cancellation).ConfigureAwait(false))["result"] is not JArray result
+                || result.Count == 0) continue;
             foreach (var item in result)
                 yield return item.DeepClone();
         }
@@ -105,12 +126,9 @@ public class CrmEntity
                                           {"params", new JObject {{"REGISTER_SONET_EVENT", registerSonetEvent ? "Y" : "N"}}}
                                       },
                                       cancellation)
-                                  .ConfigureAwait(false))
-            .TryGetBool("result");
+                                  .ConfigureAwait(false)).TryGetBool("result");
         if (result.HasValue) return result.Value;
-        var ex = new Bitrix24CallException($"crm.{Type}.update", "Element update failed");
-        ex.Data["ElementId"] = id;
-        throw ex;
+        throw new Bitrix24CallException($"crm.{Type}.update", "Element update failed") {Data = {["ElementId"] = id}};
     }
 
     /// <summary> Delete entity </summary>
@@ -122,9 +140,7 @@ public class CrmEntity
         var result = (await Client.PostAsync($"crm.{Type}.delete", new JObject {{"id", id}}, cancellation).ConfigureAwait(false))
             .TryGetBool("result");
         if (result.HasValue) return result.Value;
-        var ex = new Bitrix24CallException($"crm.{Type}.delete", "Element delete failed");
-        ex.Data["ElementId"] = id;
-        throw ex;
+        throw new Bitrix24CallException($"crm.{Type}.delete", "Element delete failed") {Data = {["ElementId"] = id}};
     }
 
     /// <summary> Add new entity </summary>
@@ -160,12 +176,12 @@ public class CrmEntity
         {
             {"order", new JObject {{"ID", "ASC"}}},
             {"filter", data},
-            {"select", new JArray(new HashSet<string>(select ?? throw new ArgumentNullException(nameof(select))).Append("ID"))},
+            {"select", new JArray(new HashSet<string>((select ?? throw new ArgumentNullException(nameof(select))).Append("ID")))},
             {"start", -1}
         };
         while (true)
         {
-            if ((await Client.PostAsync($"crm.{Type}.list", request, cancellation))["result"] is not JArray result
+            if ((await Client.PostAsync($"crm.{Type}.list", request, cancellation).ConfigureAwait(false))["result"] is not JArray result
                 || result.Count == 0) yield break;
             foreach (var item in result)
                 yield return item.DeepClone();
@@ -186,19 +202,12 @@ public class CrmEntity
         {
             {"order", new JObject {{"ID", "ASC"}}},
             {"filter", data},
-            {
-                "select", new JArray((await FieldsAsync(cancellation).ConfigureAwait(false))
-                                     .Cast<JProperty>()
-                                     .Where(property => property.Value.TryGetBool("isMultiple").ValueOrDefault(false))
-                                     .Select(property => property.Name)
-                                     .Prepend("UF_*")
-                                     .Prepend("*"))
-            },
+            {"select", new JArray(await GetDefaultFieldsListAsync(cancellation).ConfigureAwait(false))},
             {"start", -1}
         };
         while (true)
         {
-            if ((await Client.PostAsync($"crm.{Type}.list", request, cancellation))["result"] is not JArray result
+            if ((await Client.PostAsync($"crm.{Type}.list", request, cancellation).ConfigureAwait(false))["result"] is not JArray result
                 || result.Count == 0) yield break;
             foreach (var item in result)
                 yield return item.DeepClone();
@@ -206,4 +215,15 @@ public class CrmEntity
             data.Property(">ID")!.Value = result.Max(item => item.Value<int>("ID"));
         }
     }
+
+    /// <summary> List entities </summary>
+    /// <param name="select"> Requested fields </param>
+    /// <param name="cancellation"> Cancellation token </param>
+    public IAsyncEnumerable<JToken> ListAsync(IEnumerable<string> select, CancellationToken cancellation = default)
+        => ListAsync(new JObject(), select, cancellation);
+
+    /// <summary> List entities </summary>
+    /// <param name="cancellation"> Cancellation token </param>
+    public IAsyncEnumerable<JToken> ListAsync(CancellationToken cancellation = default)
+        => ListAsync(new JObject(), cancellation);
 }
