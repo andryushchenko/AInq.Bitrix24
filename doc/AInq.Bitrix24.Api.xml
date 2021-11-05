@@ -37,7 +37,7 @@
         <member name="F:AInq.Bitrix24.CrmEntity.Fields">
             <summary> Entity fields info </summary>
         </member>
-        <member name="M:AInq.Bitrix24.CrmEntity.FieldsAsync(System.Threading.CancellationToken)">
+        <member name="M:AInq.Bitrix24.CrmEntity.GetFieldsAsync(System.Threading.CancellationToken)">
             <summary> Get entity fields info </summary>
             <param name="cancellation"> Cancellation token </param>
         </member>
@@ -79,6 +79,15 @@
         <member name="M:AInq.Bitrix24.CrmEntity.ListAsync(Newtonsoft.Json.Linq.JObject,System.Threading.CancellationToken)">
             <summary> List entities </summary>
             <param name="filter"> Filter </param>
+            <param name="cancellation"> Cancellation token </param>
+        </member>
+        <member name="M:AInq.Bitrix24.CrmEntity.ListAsync(System.Collections.Generic.IEnumerable{System.String},System.Threading.CancellationToken)">
+            <summary> List entities </summary>
+            <param name="select"> Requested fields </param>
+            <param name="cancellation"> Cancellation token </param>
+        </member>
+        <member name="M:AInq.Bitrix24.CrmEntity.ListAsync(System.Threading.CancellationToken)">
+            <summary> List entities </summary>
             <param name="cancellation"> Cancellation token </param>
         </member>
         <member name="T:AInq.Bitrix24.JsonHelper">
