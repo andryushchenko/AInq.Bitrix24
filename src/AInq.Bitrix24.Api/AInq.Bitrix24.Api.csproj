@@ -1,30 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<PackageTags>Bitrix24;API;AInq</PackageTags>
-		<Description>Bitrix24 Rest API implementation</Description>
-	</PropertyGroup>
+    <PropertyGroup>
+        <PackageTags>Bitrix24;API;AInq</PackageTags>
+        <Description>Bitrix24 Rest API implementation</Description>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DocumentationFile>..\..\doc\AInq.Bitrix24.Api.xml</DocumentationFile>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DocumentationFile>..\..\doc\AInq.Bitrix24.Api.xml</DocumentationFile>
+    </PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
-	</ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\AInq.Bitrix24.Abstraction\AInq.Bitrix24.Abstraction.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\AInq.Bitrix24.Abstraction\AInq.Bitrix24.Abstraction.csproj" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="AInq.Helpers.Linq" Version="2.0.0" />
-		<PackageReference Include="AInq.Optional" Version="2.0.0" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AInq.Helpers.Linq" Version="2.0.0" />
+        <PackageReference Include="AInq.Optional" Version="2.0.0" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<Using Include="AInq.Optional" />
-		<Using Include="Newtonsoft.Json.Linq" />
-	</ItemGroup>
+    <ItemGroup>
+        <Using Include="AInq.Optional" />
+        <Using Include="Newtonsoft.Json.Linq" />
+    </ItemGroup>
 
 </Project>

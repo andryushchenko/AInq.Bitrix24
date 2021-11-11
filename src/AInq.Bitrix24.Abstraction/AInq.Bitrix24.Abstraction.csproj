@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<PackageTags>Bitrix24;AInq</PackageTags>
-		<Description>Base client for Bitrix24 Rest API</Description>
-	</PropertyGroup>
+    <PropertyGroup>
+        <PackageTags>Bitrix24;AInq</PackageTags>
+        <Description>Base client for Bitrix24 Rest API</Description>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DocumentationFile>..\..\doc\AInq.Bitrix24.Abstraction.xml</DocumentationFile>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DocumentationFile>..\..\doc\AInq.Bitrix24.Abstraction.xml</DocumentationFile>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
 
 </Project>

@@ -1,24 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<PackageTags>Bitrix24;Background;AInq</PackageTags>
-		<Description>Bitrix24 client integration with AInq.Background</Description>
-	</PropertyGroup>
+    <PropertyGroup>
+        <PackageTags>Bitrix24;Background;AInq</PackageTags>
+        <Description>Bitrix24 client integration with AInq.Background</Description>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DocumentationFile>..\..\doc\AInq.Bitrix24.Background.xml</DocumentationFile>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DocumentationFile>..\..\doc\AInq.Bitrix24.Background.xml</DocumentationFile>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="AInq.Background" Version="5.0.0" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AInq.Background" Version="5.0.0" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\AInq.Bitrix24.Abstraction\AInq.Bitrix24.Abstraction.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\AInq.Bitrix24.Abstraction\AInq.Bitrix24.Abstraction.csproj" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<Using Include="Newtonsoft.Json.Linq" />
-	</ItemGroup>
+    <ItemGroup>
+        <Using Include="Newtonsoft.Json.Linq" />
+    </ItemGroup>
 
 </Project>

@@ -1,31 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<PackageTags>Bitrix24;AInq</PackageTags>
-		<Description>Base client for Bitrix24 Rest API</Description>
-	</PropertyGroup>
+    <PropertyGroup>
+        <PackageTags>Bitrix24;AInq</PackageTags>
+        <Description>Base client for Bitrix24 Rest API</Description>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DocumentationFile>..\..\doc\AInq.Bitrix24.xml</DocumentationFile>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DocumentationFile>..\..\doc\AInq.Bitrix24.xml</DocumentationFile>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="AInq.Helpers.Polly" Version="2.0.0" />
-		<PackageReference Include="Nito.AsyncEx.Tasks" Version="5.1.2" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AInq.Helpers.Polly" Version="2.0.0" />
+        <PackageReference Include="Nito.AsyncEx.Tasks" Version="5.1.2" />
+    </ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
-	</ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\AInq.Bitrix24.Abstraction\AInq.Bitrix24.Abstraction.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\AInq.Bitrix24.Abstraction\AInq.Bitrix24.Abstraction.csproj" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<Using Include="Microsoft.Extensions.Logging" />
-		<Using Include="Newtonsoft.Json.Linq" />
-		<Using Include="Nito.AsyncEx" />
-	</ItemGroup>
+    <ItemGroup>
+        <Using Include="Microsoft.Extensions.Logging" />
+        <Using Include="Newtonsoft.Json.Linq" />
+        <Using Include="Nito.AsyncEx" />
+    </ItemGroup>
 
 </Project>
