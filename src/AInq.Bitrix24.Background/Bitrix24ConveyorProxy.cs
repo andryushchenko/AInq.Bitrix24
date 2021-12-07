@@ -16,16 +16,26 @@ using AInq.Background.Services;
 
 namespace AInq.Bitrix24;
 
-internal sealed class Bitrix24Service : IBitrix24Client
+internal sealed class Bitrix24ConveyorProxy : IBitrix24Client
 {
-    private readonly IConveyor<(string, JToken?), JToken> _conveyor;
+    private IConveyor<(string, JToken?), JToken>? _conveyor;
+    private string? _portal;
 
-    public Bitrix24Service(IConveyor<(string, JToken?), JToken> conveyor)
-        => _conveyor = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
+    internal IConveyor<(string, JToken?), JToken> Conveyor
+    {
+        set => _conveyor ??= value ?? throw new ArgumentNullException();
+    }
+
+    internal string Portal
+    {
+        set => _portal ??= value ?? throw new ArgumentNullException();
+    }
+
+    string IBitrix24Client.Portal => _portal ?? throw new InvalidOperationException();
 
     async Task<JToken> IBitrix24Client.GetAsync(string method, CancellationToken cancellation)
-        => await _conveyor.ProcessDataAsync((method, null), cancellation);
+        => await (_conveyor?.ProcessDataAsync((method, null), cancellation) ?? throw new InvalidOperationException());
 
     async Task<JToken> IBitrix24Client.PostAsync(string method, JToken data, CancellationToken cancellation)
-        => await _conveyor.ProcessDataAsync((method, data), cancellation);
+        => await (_conveyor?.ProcessDataAsync((method, data), cancellation) ?? throw new InvalidOperationException());
 }

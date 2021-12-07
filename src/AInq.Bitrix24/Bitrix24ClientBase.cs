@@ -80,6 +80,8 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             : HttpRetryPolicies.TransientRetryAsyncPolicy();
     }
 
+    string IBitrix24Client.Portal => Portal;
+
     Task<JToken> IBitrix24Client.GetAsync(string method, CancellationToken cancellation)
         => GetRequestAsync(method, cancellation);
 

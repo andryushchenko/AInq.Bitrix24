@@ -12,7 +12,7 @@
             <param name="services"> Service collection </param>
             <param name="client"> Bitrix24 client instance </param>
             <param name="timeout"> Request timeout </param>
-            <remarks> DO NOT use client implementations with internal timeout control </remarks>
+            <remarks> DO NOT use <see cref="T:AInq.Bitrix24.IBitrix24Client" /> implementations with internal timeout control </remarks>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="client" /> is NULL </exception>
@@ -22,7 +22,7 @@
             <param name="services"> Service collection </param>
             <param name="timeout"> Request timeout </param>
             <typeparam name="TClient"> Bitrix24 client type </typeparam>
-            <remarks> DO NOT use client implementations with internal timeout control </remarks>
+            <remarks> DO NOT use <see cref="T:AInq.Bitrix24.IBitrix24Client" /> implementations with internal timeout control </remarks>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
         </member>
@@ -31,7 +31,7 @@
             <param name="services"> Service collection </param>
             <param name="clientFactory"> Bitrix24 client factory </param>
             <param name="timeout"> Request timeout </param>
-            <remarks> DO NOT use client implementations with internal timeout control </remarks>
+            <remarks> DO NOT use <see cref="T:AInq.Bitrix24.IBitrix24Client" /> implementations with internal timeout control </remarks>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="clientFactory" /> is NULL </exception>
@@ -42,7 +42,7 @@
             <param name="client"> Bitrix24 client instance </param>
             <param name="timeout"> Request timeout </param>
             <param name="maxPriority"> Max allowed operation priority </param>
-            <remarks> DO NOT use client implementations with internal timeout control </remarks>
+            <remarks> DO NOT use <see cref="T:AInq.Bitrix24.IBitrix24Client" /> implementations with internal timeout control </remarks>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="client" /> is NULL </exception>
@@ -53,7 +53,7 @@
             <param name="timeout"> Request timeout </param>
             <param name="maxPriority"> Max allowed operation priority </param>
             <typeparam name="TClient"> Bitrix24 client type </typeparam>
-            <remarks> DO NOT use client implementations with internal timeout control </remarks>
+            <remarks> DO NOT use <see cref="T:AInq.Bitrix24.IBitrix24Client" /> implementations with internal timeout control </remarks>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
         </member>
@@ -63,13 +63,10 @@
             <param name="clientFactory"> Bitrix24 client factory </param>
             <param name="timeout"> Request timeout </param>
             <param name="maxPriority"> Max allowed operation priority </param>
-            <remarks> DO NOT use client implementations with internal timeout control </remarks>
+            <remarks> DO NOT use <see cref="T:AInq.Bitrix24.IBitrix24Client" /> implementations with internal timeout control </remarks>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="clientFactory" /> is NULL </exception>
-        </member>
-        <member name="T:AInq.Bitrix24.Bitrix24PriorityService">
-            <summary> Bitrix24 client service with prioritization </summary>
         </member>
     </members>
 </doc>

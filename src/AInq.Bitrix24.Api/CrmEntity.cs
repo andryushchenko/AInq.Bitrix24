@@ -44,6 +44,11 @@ public class CrmEntity
     public ValueTask<JToken> GetFieldsAsync(CancellationToken cancellation = default)
         => Fields == null ? new ValueTask<JToken>(LoadFieldsAsync(cancellation)) : new ValueTask<JToken>(Fields);
 
+    /// <summary> Create link for entity </summary>
+    /// <param name="id"> Entity ID </param>
+    public string CreateLink(int id)
+        => $"https://{Client.Portal}/crm/{Type}/details/{id}/";
+
     private async Task<JToken> LoadFieldsAsync(CancellationToken cancellation = default)
         => Fields ??= (await Client.GetAsync($"crm.{Type}.fields", cancellation).ConfigureAwait(false))["result"]!;
 

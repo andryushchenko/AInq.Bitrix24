@@ -41,6 +41,10 @@
             <summary> Get entity fields info </summary>
             <param name="cancellation"> Cancellation token </param>
         </member>
+        <member name="M:AInq.Bitrix24.CrmEntity.CreateLink(System.Int32)">
+            <summary> Create link for entity </summary>
+            <param name="id"> Entity ID </param>
+        </member>
         <member name="M:AInq.Bitrix24.CrmEntity.GetAsync(System.Int32,System.Threading.CancellationToken)">
             <summary> Get entity by Id </summary>
             <param name="id"> Id </param>

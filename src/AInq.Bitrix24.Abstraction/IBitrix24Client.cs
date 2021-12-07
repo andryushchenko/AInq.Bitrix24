@@ -19,6 +19,9 @@ namespace AInq.Bitrix24;
 /// <summary> Bitrix24 REST API client interface </summary>
 public interface IBitrix24Client
 {
+    /// <summary> Bitrix24 portal address </summary>
+    string Portal { get; }
+
     /// <summary> Call GET method </summary>
     /// <param name="method"> REST method name </param>
     /// <param name="cancellation"> Cancellation token </param>

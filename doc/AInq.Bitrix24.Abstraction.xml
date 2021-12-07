@@ -32,6 +32,9 @@
         <member name="T:AInq.Bitrix24.IBitrix24Client">
             <summary> Bitrix24 REST API client interface </summary>
         </member>
+        <member name="P:AInq.Bitrix24.IBitrix24Client.Portal">
+            <summary> Bitrix24 portal address </summary>
+        </member>
         <member name="M:AInq.Bitrix24.IBitrix24Client.GetAsync(System.String,System.Threading.CancellationToken)">
             <summary> Call GET method </summary>
             <param name="method"> REST method name </param>

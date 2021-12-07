@@ -24,7 +24,7 @@ public static class Bitrix24Injection
     /// <param name="services"> Service collection </param>
     /// <param name="client"> Bitrix24 client instance </param>
     /// <param name="timeout"> Request timeout </param>
-    /// <remarks> DO NOT use client implementations with internal timeout control </remarks>
+    /// <remarks> DO NOT use <see cref="IBitrix24Client" /> implementations with internal timeout control </remarks>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="client" /> is NULL </exception>
@@ -34,14 +34,18 @@ public static class Bitrix24Injection
             throw new InvalidOperationException("Service already exists");
         if (timeout < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(timeout));
         _ = client ?? throw new ArgumentNullException(nameof(client));
-        return services.AddSingleton<IBitrix24Client>(new Bitrix24Service(services.CreateConveyor(new Bitrix24ConveyorMachine(client, timeout), 1)));
+        var proxy = new Bitrix24ConveyorProxy
+        {
+            Conveyor = services.CreateConveyor(new Bitrix24ConveyorMachine(client, timeout), 1), Portal = client.Portal
+        };
+        return services.AddSingleton<IBitrix24Client>(proxy);
     }
 
     /// <summary> Add Bitrix24 client as background service </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="timeout"> Request timeout </param>
     /// <typeparam name="TClient"> Bitrix24 client type </typeparam>
-    /// <remarks> DO NOT use client implementations with internal timeout control </remarks>
+    /// <remarks> DO NOT use <see cref="IBitrix24Client" /> implementations with internal timeout control </remarks>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
     public static IServiceCollection AddBitrix24Service<TClient>(this IServiceCollection services, TimeSpan timeout)
@@ -50,17 +54,23 @@ public static class Bitrix24Injection
         if (services.Any(service => service.ImplementationType == typeof(IBitrix24Client)))
             throw new InvalidOperationException("Service already exists");
         if (timeout < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(timeout));
-        return services.AddSingleton<IBitrix24Client>(new Bitrix24Service(services.CreateConveyor(
-            provider => new Bitrix24ConveyorMachine(provider.GetRequiredService<TClient>(), timeout),
+        var proxy = new Bitrix24ConveyorProxy();
+        proxy.Conveyor = services.CreateConveyor(provider =>
+            {
+                var client = provider.GetRequiredService<TClient>();
+                proxy.Portal = client.Portal;
+                return new Bitrix24ConveyorMachine(client, timeout);
+            },
             ReuseStrategy.Static,
-            maxAttempts: 1)));
+            maxAttempts: 1);
+        return services.AddSingleton<IBitrix24Client>(proxy);
     }
 
     /// <summary> Add Bitrix24 client as background service </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="clientFactory"> Bitrix24 client factory </param>
     /// <param name="timeout"> Request timeout </param>
-    /// <remarks> DO NOT use client implementations with internal timeout control </remarks>
+    /// <remarks> DO NOT use <see cref="IBitrix24Client" /> implementations with internal timeout control </remarks>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="clientFactory" /> is NULL </exception>
@@ -71,10 +81,16 @@ public static class Bitrix24Injection
             throw new InvalidOperationException("Service already exists");
         if (timeout < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(timeout));
         _ = clientFactory ?? throw new ArgumentNullException(nameof(clientFactory));
-        return services.AddSingleton<IBitrix24Client>(new Bitrix24Service(services.CreateConveyor(
-            provider => new Bitrix24ConveyorMachine(clientFactory.Invoke(provider), timeout),
+        var proxy = new Bitrix24ConveyorProxy();
+        proxy.Conveyor = services.CreateConveyor(provider =>
+            {
+                var client = clientFactory.Invoke(provider);
+                proxy.Portal = client.Portal;
+                return new Bitrix24ConveyorMachine(client, timeout);
+            },
             ReuseStrategy.Static,
-            maxAttempts: 1)));
+            maxAttempts: 1);
+        return services.AddSingleton<IBitrix24Client>(proxy);
     }
 
     /// <summary> Add Bitrix24 client as background service with prioritization </summary>
@@ -82,7 +98,7 @@ public static class Bitrix24Injection
     /// <param name="client"> Bitrix24 client instance </param>
     /// <param name="timeout"> Request timeout </param>
     /// <param name="maxPriority"> Max allowed operation priority </param>
-    /// <remarks> DO NOT use client implementations with internal timeout control </remarks>
+    /// <remarks> DO NOT use <see cref="IBitrix24Client" /> implementations with internal timeout control </remarks>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="client" /> is NULL </exception>
@@ -93,8 +109,11 @@ public static class Bitrix24Injection
             throw new InvalidOperationException("Service already exists");
         if (timeout < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(timeout));
         _ = client ?? throw new ArgumentNullException(nameof(client));
-        var service = new Bitrix24PriorityService(services.CreatePriorityConveyor(new Bitrix24ConveyorMachine(client, timeout), maxPriority, 1));
-        return services.AddSingleton<IBitrix24PriorityService>(service).AddSingleton<IBitrix24Client>(service);
+        var proxy = new Bitrix24PriorityConveyorProxy
+        {
+            Conveyor = services.CreatePriorityConveyor(new Bitrix24ConveyorMachine(client, timeout), maxPriority, 1), Portal = client.Portal
+        };
+        return services.AddSingleton<IBitrix24PriorityService>(proxy).AddSingleton<IBitrix24Client>(proxy);
     }
 
     /// <summary> Add Bitrix24 client as background service with prioritization </summary>
@@ -102,7 +121,7 @@ public static class Bitrix24Injection
     /// <param name="timeout"> Request timeout </param>
     /// <param name="maxPriority"> Max allowed operation priority </param>
     /// <typeparam name="TClient"> Bitrix24 client type </typeparam>
-    /// <remarks> DO NOT use client implementations with internal timeout control </remarks>
+    /// <remarks> DO NOT use <see cref="IBitrix24Client" /> implementations with internal timeout control </remarks>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
     public static IServiceCollection AddBitrix24PriorityService<TClient>(this IServiceCollection services, TimeSpan timeout, int maxPriority = 100)
@@ -111,12 +130,17 @@ public static class Bitrix24Injection
         if (services.Any(service => service.ImplementationType == typeof(IBitrix24Client)))
             throw new InvalidOperationException("Service already exists");
         if (timeout < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(timeout));
-        var service = new Bitrix24PriorityService(services.CreatePriorityConveyor(
-            provider => new Bitrix24ConveyorMachine(provider.GetRequiredService<TClient>(), timeout),
+        var proxy = new Bitrix24PriorityConveyorProxy();
+        proxy.Conveyor = services.CreatePriorityConveyor(provider =>
+            {
+                var client = provider.GetRequiredService<TClient>();
+                proxy.Portal = client.Portal;
+                return new Bitrix24ConveyorMachine(client, timeout);
+            },
             ReuseStrategy.Static,
             maxPriority: maxPriority,
-            maxAttempts: 1));
-        return services.AddSingleton<IBitrix24PriorityService>(service).AddSingleton<IBitrix24Client>(service);
+            maxAttempts: 1);
+        return services.AddSingleton<IBitrix24PriorityService>(proxy).AddSingleton<IBitrix24Client>(proxy);
     }
 
     /// <summary> Add Bitrix24 client as background service with prioritization </summary>
@@ -124,7 +148,7 @@ public static class Bitrix24Injection
     /// <param name="clientFactory"> Bitrix24 client factory </param>
     /// <param name="timeout"> Request timeout </param>
     /// <param name="maxPriority"> Max allowed operation priority </param>
-    /// <remarks> DO NOT use client implementations with internal timeout control </remarks>
+    /// <remarks> DO NOT use <see cref="IBitrix24Client" /> implementations with internal timeout control </remarks>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="clientFactory" /> is NULL </exception>
@@ -135,11 +159,16 @@ public static class Bitrix24Injection
             throw new InvalidOperationException("Service already exists");
         if (timeout < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(timeout));
         _ = clientFactory ?? throw new ArgumentNullException(nameof(clientFactory));
-        var service = new Bitrix24PriorityService(services.CreatePriorityConveyor(
-            provider => new Bitrix24ConveyorMachine(clientFactory.Invoke(provider), timeout),
+        var proxy = new Bitrix24PriorityConveyorProxy();
+        proxy.Conveyor = services.CreatePriorityConveyor(provider =>
+            {
+                var client = clientFactory.Invoke(provider);
+                proxy.Portal = client.Portal;
+                return new Bitrix24ConveyorMachine(client, timeout);
+            },
             ReuseStrategy.Static,
             maxPriority: maxPriority,
-            maxAttempts: 1));
-        return services.AddSingleton<IBitrix24PriorityService>(service).AddSingleton<IBitrix24Client>(service);
+            maxAttempts: 1);
+        return services.AddSingleton<IBitrix24PriorityService>(proxy).AddSingleton<IBitrix24Client>(proxy);
     }
 }
