@@ -34,10 +34,10 @@ internal sealed class Bitrix24PriorityConveyorProxy : IBitrix24Client, IBitrix24
     string IBitrix24Client.Portal => _portal ?? throw new InvalidOperationException();
 
     async Task<JToken> IBitrix24Client.GetAsync(string method, CancellationToken cancellation)
-        => await (_conveyor?.ProcessDataAsync((method, null), cancellation) ?? throw new InvalidOperationException());
+        => await (_conveyor?.ProcessDataAsync((method, null), cancellation) ?? throw new InvalidOperationException()).ConfigureAwait(false);
 
     async Task<JToken> IBitrix24Client.PostAsync(string method, JToken data, CancellationToken cancellation)
-        => await (_conveyor?.ProcessDataAsync((method, data), cancellation) ?? throw new InvalidOperationException());
+        => await (_conveyor?.ProcessDataAsync((method, data), cancellation) ?? throw new InvalidOperationException()).ConfigureAwait(false);
 
     int IBitrix24PriorityService.MaxPriority => _conveyor?.MaxPriority ?? throw new InvalidOperationException();
 
@@ -58,9 +58,11 @@ internal sealed class Bitrix24PriorityConveyorProxy : IBitrix24Client, IBitrix24
         string IBitrix24Client.Portal => _owner._portal ?? throw new InvalidOperationException();
 
         async Task<JToken> IBitrix24Client.GetAsync(string method, CancellationToken cancellation)
-            => await (_owner._conveyor?.ProcessDataAsync((method, null), _priority, cancellation) ?? throw new InvalidOperationException());
+            => await (_owner._conveyor?.ProcessDataAsync((method, null), _priority, cancellation) ?? throw new InvalidOperationException())
+                .ConfigureAwait(false);
 
         async Task<JToken> IBitrix24Client.PostAsync(string method, JToken data, CancellationToken cancellation)
-            => await (_owner._conveyor?.ProcessDataAsync((method, data), _priority, cancellation) ?? throw new InvalidOperationException());
+            => await (_owner._conveyor?.ProcessDataAsync((method, data), _priority, cancellation) ?? throw new InvalidOperationException())
+                .ConfigureAwait(false);
     }
 }
