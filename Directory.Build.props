@@ -11,7 +11,7 @@
         <Copyright>Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-        <Version>3.1.0</Version>
+        <Version>3.1.1</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -19,8 +19,8 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <DebugType>portable</DebugType>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageReleaseNotes>[ADD] New methods
-[IMP] Reproducible build</PackageReleaseNotes>
+        <PackageReleaseNotes>[FIX] Missed ConfigureAwait
+[UPD] Package references</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
