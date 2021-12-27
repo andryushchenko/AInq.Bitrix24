@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AInq.Helpers.Polly" Version="2.1.1" />
+        <PackageReference Include="AInq.Helpers.Polly" Version="2.1.2" />
         <PackageReference Include="Nito.AsyncEx.Tasks" Version="5.1.2" />
     </ItemGroup>
 
