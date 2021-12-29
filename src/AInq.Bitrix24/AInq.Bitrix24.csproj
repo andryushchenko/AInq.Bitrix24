@@ -11,7 +11,6 @@
 
     <ItemGroup>
         <PackageReference Include="AInq.Helpers.Polly" Version="2.1.2" />
-        <PackageReference Include="Nito.AsyncEx.Tasks" Version="5.1.2" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
@@ -25,7 +24,6 @@
     <ItemGroup>
         <Using Include="Microsoft.Extensions.Logging" />
         <Using Include="Newtonsoft.Json.Linq" />
-        <Using Include="Nito.AsyncEx" />
     </ItemGroup>
 
 </Project>

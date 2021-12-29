@@ -54,10 +54,12 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     protected Bitrix24ClientBase(string portal, string clientId, string clientSecret, TimeSpan timeout, int maxTransientRetry = -1,
         int maxTimeoutRetry = -1, ILogger<IBitrix24Client>? logger = null, LogLevel logLevel = LogLevel.Debug)
     {
-        ClientId = string.IsNullOrWhiteSpace(clientId) ? throw new ArgumentOutOfRangeException(nameof(clientId)) : clientId;
-        _clientSecret = string.IsNullOrWhiteSpace(clientSecret) ? throw new ArgumentOutOfRangeException(nameof(clientSecret)) : clientSecret;
-        Portal = string.IsNullOrWhiteSpace(portal) ? throw new ArgumentOutOfRangeException(nameof(portal)) : portal;
-        Timeout = timeout > TimeSpan.Zero ? timeout : throw new ArgumentOutOfRangeException(nameof(timeout));
+        ClientId = string.IsNullOrWhiteSpace(clientId) ? throw new ArgumentNullException(nameof(clientId)) : clientId;
+        _clientSecret = string.IsNullOrWhiteSpace(clientSecret) ? throw new ArgumentNullException(nameof(clientSecret)) : clientSecret;
+        Portal = string.IsNullOrWhiteSpace(portal) ? throw new ArgumentNullException(nameof(portal)) : portal;
+        Timeout = timeout >= TimeSpan.Zero
+            ? timeout
+            : throw new ArgumentOutOfRangeException(nameof(timeout), timeout, "Must be greater than or equal to 00:00:00.000");
         Logger = logger ?? NullLogger<IBitrix24Client>.Instance;
         _logLevel = logLevel;
         _client = new HttpClient {BaseAddress = new Uri($"https://{Portal}/rest/")};

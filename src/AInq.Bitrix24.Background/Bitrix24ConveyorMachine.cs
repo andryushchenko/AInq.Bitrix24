@@ -25,7 +25,9 @@ internal sealed class Bitrix24ConveyorMachine : IConveyorMachine<(string, JToken
     public Bitrix24ConveyorMachine(IBitrix24Client client, TimeSpan timeout)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
-        _timeout = timeout < TimeSpan.Zero ? throw new ArgumentOutOfRangeException(nameof(timeout)) : timeout;
+        _timeout = timeout >= TimeSpan.Zero
+            ? timeout
+            : throw new ArgumentOutOfRangeException(nameof(timeout), timeout, "Must be greater than or equal to 00:00:00.000");
     }
 
     async Task<JToken> IConveyorMachine<(string, JToken?), JToken>.ProcessDataAsync((string, JToken?) data, IServiceProvider provider,
@@ -42,6 +44,7 @@ internal sealed class Bitrix24ConveyorMachine : IConveyorMachine<(string, JToken
     {
         get
         {
+            if (_timeout == TimeSpan.Zero) return TimeSpan.Zero;
             var now = DateTime.UtcNow;
             return now < _nextCall ? _nextCall.Subtract(now) : TimeSpan.Zero;
         }

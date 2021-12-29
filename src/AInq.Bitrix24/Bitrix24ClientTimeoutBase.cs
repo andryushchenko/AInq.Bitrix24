@@ -27,16 +27,20 @@ public abstract class Bitrix24ClientTimeoutBase : Bitrix24ClientBase
     /// <inheritdoc />
     protected override async Task<JToken> GetRequestAsync(string method, CancellationToken cancellation = default)
     {
-        await _delay.WaitAsync(cancellation).ConfigureAwait(false);
-        _delay = Task.Delay(Timeout, default);
+        if (_delay.Status is not TaskStatus.RanToCompletion)
+            await _delay.WaitAsync(cancellation).ConfigureAwait(false);
+        if (Timeout > TimeSpan.Zero)
+            _delay = Task.Delay(Timeout, CancellationToken.None);
         return await base.GetRequestAsync(method, cancellation).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     protected override async Task<JToken> PostRequestAsync(string method, JToken data, CancellationToken cancellation = default)
     {
-        await _delay.WaitAsync(cancellation).ConfigureAwait(false);
-        _delay = Task.Delay(Timeout, default);
+        if (_delay.Status is not TaskStatus.RanToCompletion)
+            await _delay.WaitAsync(cancellation).ConfigureAwait(false);
+        if (Timeout > TimeSpan.Zero)
+            _delay = Task.Delay(Timeout, CancellationToken.None);
         return await base.PostRequestAsync(method, data, cancellation).ConfigureAwait(false);
     }
 }
