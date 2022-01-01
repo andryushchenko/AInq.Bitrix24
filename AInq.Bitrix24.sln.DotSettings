@@ -69,7 +69,7 @@
 	<s:Boolean x:Key="/Default/CodeStyle/CSharpUsing/CanUseGlobalAlias/@EntryValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeStyle/CSharpUsing/SortUsingsWithSystemFirst/@EntryValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeStyle/EditorConfig/SyncToVisualStudio/@EntryValue">True</s:Boolean>
-	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Copyright $CURRENT_YEAR$ Anton Andryushchenko&#xD;
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Copyright 2021-$CURRENT_YEAR$ Anton Andryushchenko&#xD;
 &#xD;
 Licensed under the Apache License, Version 2.0 (the "License");&#xD;
 you may not use this file except in compliance with the License.&#xD;
