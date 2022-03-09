@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>3.1.4.1</Version>
         <PackageTags>Bitrix24;AInq</PackageTags>
         <Description>Base client for Bitrix24 Rest API</Description>
     </PropertyGroup>
