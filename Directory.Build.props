@@ -11,14 +11,14 @@
         <Copyright>Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-        <Version>3.1.4</Version>
+        <Version>3.1.5</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageReleaseNotes>[IMP] Minor internal improvement</PackageReleaseNotes>
+        <PackageReleaseNotes>[UPD] Package references</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
