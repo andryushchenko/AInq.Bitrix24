@@ -28,18 +28,23 @@ public class Crm
     }
 
     /// <summary> CRM Lead calls </summary>
+    [PublicAPI]
     public CrmEntity Lead { get; }
 
     /// <summary> CRM Contact calls </summary>
+    [PublicAPI]
     public CrmEntity Contact { get; }
 
     /// <summary> CRM Company calls </summary>
+    [PublicAPI]
     public CrmEntity Company { get; }
 
     /// <summary> CRM Deal calls </summary>
+    [PublicAPI]
     public CrmEntity Deal { get; }
 
     /// <summary> Remove cached data </summary>
+    [PublicAPI]
     public void ResetCache()
     {
         Lead.ResetCache();

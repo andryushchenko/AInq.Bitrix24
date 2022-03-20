@@ -32,15 +32,19 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     private readonly IAsyncPolicy<HttpResponseMessage> _requestPolicy;
 
     /// <summary> OAuth application Client ID </summary>
+    [PublicAPI]
     protected readonly string ClientId;
 
     /// <summary> Logger instance </summary>
+    [PublicAPI]
     protected readonly ILogger<IBitrix24Client> Logger;
 
     /// <summary> Bitrix24 portal </summary>
+    [PublicAPI]
     protected readonly string Portal;
 
     /// <summary> Request timeout </summary>
+    [PublicAPI]
     protected readonly TimeSpan Timeout;
 
     /// <param name="portal"> Bitrix24 portal </param>

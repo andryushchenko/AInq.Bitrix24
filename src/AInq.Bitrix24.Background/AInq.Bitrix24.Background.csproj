@@ -5,12 +5,8 @@
         <Description>Bitrix24 client integration with AInq.Background</Description>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>..\..\doc\AInq.Bitrix24.Background.xml</DocumentationFile>
-    </PropertyGroup>
-
     <ItemGroup>
-        <PackageReference Include="AInq.Background" Version="5.2.3" />
+        <PackageReference Include="AInq.Background" Version="5.3.0-rc.3" />
     </ItemGroup>
 
     <ItemGroup>

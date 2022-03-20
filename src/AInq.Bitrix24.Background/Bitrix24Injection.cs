@@ -28,6 +28,7 @@ public static class Bitrix24Injection
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="client" /> is NULL </exception>
+    [PublicAPI]
     public static IServiceCollection AddBitrix24Service(this IServiceCollection services, IBitrix24Client client, TimeSpan timeout)
     {
         if (services.Any(service => service.ImplementationType == typeof(IBitrix24Client)))
@@ -48,6 +49,7 @@ public static class Bitrix24Injection
     /// <remarks> DO NOT use <see cref="IBitrix24Client" /> implementations with internal timeout control </remarks>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
+    [PublicAPI]
     public static IServiceCollection AddBitrix24Service<TClient>(this IServiceCollection services, TimeSpan timeout)
         where TClient : IBitrix24Client
     {
@@ -74,6 +76,7 @@ public static class Bitrix24Injection
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="clientFactory" /> is NULL </exception>
+    [PublicAPI]
     public static IServiceCollection AddBitrix24Service(this IServiceCollection services, Func<IServiceProvider, IBitrix24Client> clientFactory,
         TimeSpan timeout)
     {
@@ -102,6 +105,7 @@ public static class Bitrix24Injection
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="client" /> is NULL </exception>
+    [PublicAPI]
     public static IServiceCollection AddBitrix24PriorityService(this IServiceCollection services, IBitrix24Client client, TimeSpan timeout,
         int maxPriority = 100)
     {
@@ -124,6 +128,7 @@ public static class Bitrix24Injection
     /// <remarks> DO NOT use <see cref="IBitrix24Client" /> implementations with internal timeout control </remarks>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
+    [PublicAPI]
     public static IServiceCollection AddBitrix24PriorityService<TClient>(this IServiceCollection services, TimeSpan timeout, int maxPriority = 100)
         where TClient : IBitrix24Client
     {
@@ -152,6 +157,7 @@ public static class Bitrix24Injection
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="timeout" /> value is invalid </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="clientFactory" /> is NULL </exception>
+    [PublicAPI]
     public static IServiceCollection AddBitrix24PriorityService(this IServiceCollection services,
         Func<IServiceProvider, IBitrix24Client> clientFactory, TimeSpan timeout, int maxPriority = 100)
     {

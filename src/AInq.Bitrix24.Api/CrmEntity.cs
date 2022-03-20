@@ -22,12 +22,15 @@ namespace AInq.Bitrix24;
 public class CrmEntity
 {
     /// <summary> CRM client </summary>
+    [PublicAPI]
     protected readonly IBitrix24Client Client;
 
     /// <summary> Entity type </summary>
+    [PublicAPI]
     protected readonly string Type;
 
     /// <summary> Entity fields info </summary>
+    [PublicAPI]
     protected JToken? Fields;
 
     internal CrmEntity(string type, IBitrix24Client client)
@@ -41,11 +44,13 @@ public class CrmEntity
 
     /// <summary> Get entity fields info </summary>
     /// <param name="cancellation"> Cancellation token </param>
+    [PublicAPI]
     public ValueTask<JToken> GetFieldsAsync(CancellationToken cancellation = default)
         => Fields == null ? new ValueTask<JToken>(LoadFieldsAsync(cancellation)) : new ValueTask<JToken>(Fields);
 
     /// <summary> Create link for entity </summary>
     /// <param name="id"> Entity ID </param>
+    [PublicAPI]
     public string CreateLink(int id)
         => $"https://{Client.Portal}/crm/{Type}/details/{id}/";
 
@@ -74,6 +79,7 @@ public class CrmEntity
     /// <summary> Get entity by Id </summary>
     /// <param name="id"> Id </param>
     /// <param name="cancellation"> Cancellation token </param>
+    [PublicAPI]
     public async Task<Maybe<JToken>> GetAsync(int id, CancellationToken cancellation = default)
     {
         if (id < 1) throw new ArgumentOutOfRangeException(nameof(id));
@@ -97,6 +103,7 @@ public class CrmEntity
     /// <summary> Get entities by Id </summary>
     /// <param name="ids"> Id collection </param>
     /// <param name="cancellation"> Cancellation token </param>
+    [PublicAPI]
     public async IAsyncEnumerable<JToken> GetAsync(IEnumerable<int> ids, [EnumeratorCancellation] CancellationToken cancellation = default)
     {
         _ = ids ?? throw new ArgumentNullException(nameof(ids));
@@ -120,6 +127,7 @@ public class CrmEntity
     /// <param name="fields"> Fields data </param>
     /// <param name="registerSonetEvent"> Register update event </param>
     /// <param name="cancellation"> Cancellation token </param>
+    [PublicAPI]
     public async Task<bool> UpdateAsync(int id, JToken fields, bool registerSonetEvent = false, CancellationToken cancellation = default)
     {
         if (id < 1) throw new ArgumentOutOfRangeException(nameof(id));
@@ -139,6 +147,7 @@ public class CrmEntity
     /// <summary> Delete entity </summary>
     /// <param name="id"> Entity Id </param>
     /// <param name="cancellation"> Cancellation token </param>
+    [PublicAPI]
     public async Task<bool> DeleteAsync(int id, CancellationToken cancellation = default)
     {
         if (id < 1) throw new ArgumentOutOfRangeException(nameof(id));
@@ -153,6 +162,7 @@ public class CrmEntity
     /// <param name="registerSonetEvent"> Register update event </param>
     /// <param name="cancellation"> Cancellation token </param>
     /// <returns> New entity Id </returns>
+    [PublicAPI]
     public async Task<int> AddAsync(JObject fields, bool registerSonetEvent = false, CancellationToken cancellation = default)
     {
         var id = (await Client.PostAsync($"crm.{Type}.add",
@@ -171,7 +181,8 @@ public class CrmEntity
     /// <param name="filter"> Filter </param>
     /// <param name="select"> Requested fields </param>
     /// <param name="cancellation"> Cancellation token </param>
-    public async IAsyncEnumerable<JToken> ListAsync(JObject filter, IEnumerable<string> select,
+    [PublicAPI]
+    public async IAsyncEnumerable<JToken> ListAsync(JObject filter, [InstantHandle] IEnumerable<string> select,
         [EnumeratorCancellation] CancellationToken cancellation = default)
     {
         var data = ((filter ?? throw new ArgumentNullException(nameof(filter))).DeepClone() as JObject)!;
@@ -198,6 +209,7 @@ public class CrmEntity
     /// <summary> List entities </summary>
     /// <param name="filter"> Filter </param>
     /// <param name="cancellation"> Cancellation token </param>
+    [PublicAPI]
     public async IAsyncEnumerable<JToken> ListAsync(JObject filter, [EnumeratorCancellation] CancellationToken cancellation = default)
     {
         var data = ((filter ?? throw new ArgumentNullException(nameof(filter))).DeepClone() as JObject)!;
@@ -224,11 +236,13 @@ public class CrmEntity
     /// <summary> List entities </summary>
     /// <param name="select"> Requested fields </param>
     /// <param name="cancellation"> Cancellation token </param>
-    public IAsyncEnumerable<JToken> ListAsync(IEnumerable<string> select, CancellationToken cancellation = default)
+    [PublicAPI]
+    public IAsyncEnumerable<JToken> ListAsync([InstantHandle] IEnumerable<string> select, CancellationToken cancellation = default)
         => ListAsync(new JObject(), select, cancellation);
 
     /// <summary> List entities </summary>
     /// <param name="cancellation"> Cancellation token </param>
+    [PublicAPI]
     public IAsyncEnumerable<JToken> ListAsync(CancellationToken cancellation = default)
         => ListAsync(new JObject(), cancellation);
 }

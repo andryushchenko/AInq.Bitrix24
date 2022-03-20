@@ -20,16 +20,19 @@ namespace AInq.Bitrix24;
 public interface IBitrix24Client
 {
     /// <summary> Bitrix24 portal address </summary>
+    [PublicAPI]
     string Portal { get; }
 
     /// <summary> Call GET method </summary>
     /// <param name="method"> REST method name </param>
     /// <param name="cancellation"> Cancellation token </param>
+    [PublicAPI]
     Task<JToken> GetAsync(string method, CancellationToken cancellation = default);
 
     /// <summary> Call POST method </summary>
     /// <param name="method"> REST method name </param>
     /// <param name="data"> Call data </param>
     /// <param name="cancellation"> Cancellation token </param>
+    [PublicAPI]
     Task<JToken> PostAsync(string method, JToken data, CancellationToken cancellation = default);
 }

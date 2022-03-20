@@ -46,5 +46,6 @@ public class Bitrix24CallException : Exception
     protected Bitrix24CallException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
     /// <summary> REST API method name </summary>
+    [PublicAPI]
     public string Method { get; } = string.Empty;
 }

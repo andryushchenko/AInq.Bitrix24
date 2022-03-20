@@ -18,9 +18,11 @@ namespace AInq.Bitrix24;
 public interface IBitrix24PriorityService
 {
     /// <summary> Max allowed operation priority </summary>
+    [PublicAPI]
     public int MaxPriority { get; }
 
     /// <summary> Create <see cref="IBitrix24Client" /> proxy-client instance with given <paramref name="priority" /> </summary>
     /// <param name="priority"> Operation priority </param>
+    [PublicAPI]
     public IBitrix24Client GetPriorityClient(int priority);
 }

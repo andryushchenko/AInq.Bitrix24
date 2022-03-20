@@ -11,18 +11,20 @@
         <Copyright>Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-        <Version>3.1.5</Version>
+        <Version>3.1.6-rc.1</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>[UPD] Package references</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <Compile Include="..\Shared\JetBrains.Annotations.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -34,6 +36,10 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="JetBrains.Annotations" />
     </ItemGroup>
 
 </Project>

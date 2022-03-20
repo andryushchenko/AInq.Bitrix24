@@ -19,6 +19,7 @@ public static class JsonHelper
 {
     /// <summary> Try get <see cref="float" /> value </summary>
     /// <param name="token"> JSON source </param>
+    [PublicAPI]
     public static Maybe<float> TryGetFloat(this JToken token)
         => token?.Type switch
         {
@@ -32,11 +33,13 @@ public static class JsonHelper
     /// <summary> Try get <see cref="float" /> value </summary>
     /// <param name="token"> JSON source </param>
     /// <param name="paramName"> Property name </param>
+    [PublicAPI]
     public static Maybe<float> TryGetFloat(this JToken token, string paramName)
         => token[paramName]?.TryGetFloat() ?? Maybe.None<float>();
 
     /// <summary> Try get <see cref="int" /> value </summary>
     /// <param name="token"> JSON source </param>
+    [PublicAPI]
     public static Maybe<int> TryGetInt(this JToken token)
         => token?.Type switch
         {
@@ -51,12 +54,14 @@ public static class JsonHelper
     /// <summary> Try get <see cref="int" /> value </summary>
     /// <param name="token"> JSON source </param>
     /// <param name="paramName"> Property name </param>
+    [PublicAPI]
     public static Maybe<int> TryGetInt(this JToken token, string paramName)
         => token[paramName]?.TryGetInt() ?? Maybe.None<int>();
 
     /// <summary> Try get <see cref="int" /> values array </summary>
     /// <param name="token"> JSON source </param>
     /// <param name="ignoreTypeMismatch"> Skip values that can't be parsed, otherwise return empty array </param>
+    [PublicAPI]
     public static int[] TryGetIntArray(this JToken token, bool ignoreTypeMismatch = true)
         => token?.Type switch
         {
@@ -76,11 +81,13 @@ public static class JsonHelper
     /// <param name="token"> JSON source </param>
     /// <param name="paramName"> Property name </param>
     /// <param name="ignoreTypeMismatch"> Skip values that can't be parsed, otherwise return empty array </param>
+    [PublicAPI]
     public static int[] TryGetIntArray(this JToken token, string paramName, bool ignoreTypeMismatch = true)
         => token[paramName]?.TryGetIntArray(ignoreTypeMismatch) ?? Array.Empty<int>();
 
     /// <summary> Try get <see cref="bool" /> value </summary>
     /// <param name="token"> JSON source </param>
+    [PublicAPI]
     public static Maybe<bool> TryGetBool(this JToken token)
         => token?.Type switch
         {
@@ -97,22 +104,26 @@ public static class JsonHelper
     /// <summary> Try get <see cref="bool" /> value </summary>
     /// <param name="token"> JSON source </param>
     /// <param name="paramName"> Property name </param>
+    [PublicAPI]
     public static Maybe<bool> TryGetBool(this JToken token, string paramName)
         => token[paramName]?.TryGetBool() ?? Maybe.None<bool>();
 
     /// <summary> Try get <see cref="bool" /> value </summary>
     /// <param name="token"> JSON source </param>
+    [PublicAPI]
     public static bool GetBoolOrFalse(this JToken token)
         => token.TryGetBool().ValueOrDefault(false);
 
     /// <summary> Try get <see cref="bool" /> value </summary>
     /// <param name="token"> JSON source </param>
     /// <param name="paramName"> Property name </param>
+    [PublicAPI]
     public static bool GetBoolOrFalse(this JToken token, string paramName)
         => token[paramName]?.GetBoolOrFalse() ?? false;
 
     /// <summary> Try get <see cref="DateTime" /> value </summary>
     /// <param name="token"> JSON source </param>
+    [PublicAPI]
     public static Maybe<DateTime> TryGetDateTime(this JToken token)
     {
         try
@@ -128,6 +139,7 @@ public static class JsonHelper
     /// <summary> Try get <see cref="DateTime" /> value </summary>
     /// <param name="token"> JSON source </param>
     /// <param name="paramName"> Property name </param>
+    [PublicAPI]
     public static Maybe<DateTime> TryGetDateTime(this JToken token, string paramName)
         => token[paramName]?.TryGetDateTime() ?? Maybe.None<DateTime>();
 }

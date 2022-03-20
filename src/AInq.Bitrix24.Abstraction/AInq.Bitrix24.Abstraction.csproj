@@ -5,10 +5,6 @@
         <Description>Base client for Bitrix24 Rest API</Description>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>..\..\doc\AInq.Bitrix24.Abstraction.xml</DocumentationFile>
-    </PropertyGroup>
-
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
