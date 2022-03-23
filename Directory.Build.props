@@ -8,22 +8,24 @@
         <RootNamespace>AInq.Bitrix24</RootNamespace>
         <Authors>Anton Andryushchenko</Authors>
         <RepositoryUrl>https://github.com/andryushchenko/AInq.Bitrix24</RepositoryUrl>
-        <Copyright>Anton Andryushchenko</Copyright>
+        <Copyright>Copyright (c) Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-        <Version>3.1.6-rc.1</Version>
+        <Version>3.1.6</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>AInq.png</PackageIcon>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>[UPD] Package references</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\..\AInq.png" Pack="true" PackagePath="\" />
         <Compile Include="..\Shared\JetBrains.Annotations.cs" />
     </ItemGroup>
 

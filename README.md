@@ -2,6 +2,8 @@
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/andryushchenko/AInq.Bitrix24)](https://github.com/andryushchenko/AInq.Bitrix24/releases) [![GitHub](https://img.shields.io/github/license/andryushchenko/AInq.Bitrix24)](LICENSE)
 
+![AInq](https://raw.githubusercontent.com/andryushchenko/AInq.Bitrix24/main/AInq.png)
+
 ## What is it?
 
 Client for [Bitrix24 Rest API](https://dev.1c-bitrix.ru/rest_help/)
