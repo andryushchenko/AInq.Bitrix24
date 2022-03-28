@@ -16,7 +16,9 @@ jobs:
     - name: Pack
       run: dotnet pack -o . -c Release /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="${{ github.event.release.body }}"
     - name: Push to Nuget
-      run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+      run: dotnet nuget push *.nupkg -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
     - name: GPR setup
       uses: actions/setup-dotnet@v1
       with:
