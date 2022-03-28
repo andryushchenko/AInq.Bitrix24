@@ -11,7 +11,6 @@
         <Copyright>Copyright (c) Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-        <Version>3.1.6</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -20,7 +19,6 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>AInq.png</PackageIcon>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <PackageReleaseNotes>[UPD] Package references</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
