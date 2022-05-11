@@ -43,11 +43,10 @@ public static class JsonHelper
     public static Maybe<int> TryGetInt(this JToken token)
         => token?.Type switch
         {
-            JTokenType.Integer => Maybe.Value(token.Value<int>()),
+            JTokenType.Integer => Try.Result(token.Value<int>).AsMaybe(),
             JTokenType.String => int.TryParse(token.Value<string>(), out var result)
                 ? Maybe.Value(result)
                 : Maybe.None<int>(),
-            JTokenType.Float => Maybe.Value((int) token.Value<float>()),
             _ => Maybe.None<int>()
         };
 
@@ -57,6 +56,26 @@ public static class JsonHelper
     [PublicAPI]
     public static Maybe<int> TryGetInt(this JToken token, string paramName)
         => token[paramName]?.TryGetInt() ?? Maybe.None<int>();
+
+    /// <summary> Try get <see cref="long" /> value </summary>
+    /// <param name="token"> JSON source </param>
+    [PublicAPI]
+    public static Maybe<long> TryGetLong(this JToken token)
+        => token?.Type switch
+        {
+            JTokenType.Integer => Maybe.Value(token.Value<long>()),
+            JTokenType.String => long.TryParse(token.Value<string>(), out var result)
+                ? Maybe.Value(result)
+                : Maybe.None<long>(),
+            _ => Maybe.None<long>()
+        };
+
+    /// <summary> Try get <see cref="long" /> value </summary>
+    /// <param name="token"> JSON source </param>
+    /// <param name="paramName"> Property name </param>
+    [PublicAPI]
+    public static Maybe<long> TryGetLong(this JToken token, string paramName)
+        => token[paramName]?.TryGetLong() ?? Maybe.None<long>();
 
     /// <summary> Try get <see cref="int" /> values array </summary>
     /// <param name="token"> JSON source </param>

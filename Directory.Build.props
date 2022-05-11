@@ -3,7 +3,7 @@
     <Sdk Name="DotNet.ReproducibleBuilds.Isolated" Version="1.1.1" />
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net6.0</TargetFrameworks>
         <Product>AInq.Bitrix24</Product>
         <RootNamespace>AInq.Bitrix24</RootNamespace>
         <Authors>Anton Andryushchenko</Authors>
