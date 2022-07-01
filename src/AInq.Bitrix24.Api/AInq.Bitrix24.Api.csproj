@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AInq.Helpers.Linq" Version="2.2.0" />
+        <PackageReference Include="AInq.Helpers.Linq" Version="2.2.1" />
         <PackageReference Include="AInq.Optional" Version="3.3.0" />
     </ItemGroup>
 
