@@ -23,9 +23,9 @@ public static class JsonHelper
     public static Maybe<float> TryGetFloat(this JToken token)
         => token?.Type switch
         {
-            JTokenType.Float or JTokenType.Integer => Maybe.Value(token.Value<float>()),
+            JTokenType.Float or JTokenType.Integer => token.Value<float>(),
             JTokenType.String => float.TryParse(token.Value<string>(), out var result)
-                ? Maybe.Value(result)
+                ? result
                 : Maybe.None<float>(),
             _ => Maybe.None<float>()
         };
@@ -43,9 +43,9 @@ public static class JsonHelper
     public static Maybe<int> TryGetInt(this JToken token)
         => token?.Type switch
         {
-            JTokenType.Integer => Try.Result(token.Value<int>).AsMaybe(),
+            JTokenType.Integer => token.Value<int>(),
             JTokenType.String => int.TryParse(token.Value<string>(), out var result)
-                ? Maybe.Value(result)
+                ? result
                 : Maybe.None<int>(),
             _ => Maybe.None<int>()
         };
@@ -63,9 +63,9 @@ public static class JsonHelper
     public static Maybe<long> TryGetLong(this JToken token)
         => token?.Type switch
         {
-            JTokenType.Integer => Maybe.Value(token.Value<long>()),
+            JTokenType.Integer => token.Value<long>(),
             JTokenType.String => long.TryParse(token.Value<string>(), out var result)
-                ? Maybe.Value(result)
+                ? result
                 : Maybe.None<long>(),
             _ => Maybe.None<long>()
         };
@@ -110,13 +110,13 @@ public static class JsonHelper
     public static Maybe<bool> TryGetBool(this JToken token)
         => token?.Type switch
         {
-            JTokenType.Boolean => Maybe.Value(token.Value<bool>()),
-            JTokenType.Integer or JTokenType.Float => Maybe.Value(token.Value<float>() > 0),
+            JTokenType.Boolean => token.Value<bool>(),
+            JTokenType.Integer or JTokenType.Float => token.Value<float>() > 0,
             JTokenType.String => bool.TryParse(token.Value<string>(), out var boolResult)
-                ? Maybe.Value(boolResult)
+                ? boolResult
                 : float.TryParse(token.Value<string>(), out var floatResult)
-                    ? Maybe.Value(floatResult > 0)
-                    : Maybe.Value(string.Equals(token.Value<string>(), "Y", StringComparison.InvariantCultureIgnoreCase)),
+                    ? floatResult > 0
+                    : string.Equals(token.Value<string>(), "Y", StringComparison.InvariantCultureIgnoreCase),
             _ => Maybe.None<bool>()
         };
 
@@ -147,7 +147,7 @@ public static class JsonHelper
     {
         try
         {
-            return Maybe.Value(token.Value<DateTime>());
+            return token.Value<DateTime>();
         }
         catch (Exception)
         {

@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AInq.Background" Version="5.4.0" />
+        <PackageReference Include="AInq.Background" Version="5.4.1" />
     </ItemGroup>
 
     <ItemGroup>

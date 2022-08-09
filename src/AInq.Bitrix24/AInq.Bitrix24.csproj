@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AInq.Helpers.Polly" Version="2.2.1" />
+        <PackageReference Include="AInq.Helpers.Polly" Version="2.2.2" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">

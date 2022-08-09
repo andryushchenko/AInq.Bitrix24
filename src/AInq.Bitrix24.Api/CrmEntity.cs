@@ -88,8 +88,8 @@ public class CrmEntity
             var result = await Client.GetAsync($"crm.{Type}.get?id={id}", cancellation).ConfigureAwait(false);
             return result["result"] switch
             {
-                JObject deal => Maybe.Value<JToken>(deal),
-                JArray {Count: > 0} array => Maybe.Value(array.First!),
+                JObject deal => deal,
+                JArray {Count: > 0} array => array.First!,
                 _ => Maybe.None<JToken>()
             };
         }
