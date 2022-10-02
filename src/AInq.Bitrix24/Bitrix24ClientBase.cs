@@ -110,8 +110,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
         HttpStatusCode status;
         try
         {
-            using var response = await _requestPolicy.GetAsync(_client, method, Logger, cancellation, requestLogLevel: _logLevel)
-                                                     .ConfigureAwait(false);
+            using var response = await _requestPolicy.GetAsync(_client, method, Logger, false, _logLevel, cancellation).ConfigureAwait(false);
             status = response.StatusCode;
             result = await ReadHttpResponse(response, cancellation).ConfigureAwait(false);
         }
@@ -149,7 +148,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
         try
         {
             using var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
-            using var response = await _requestPolicy.PostAsync(_client, method, content, Logger, cancellation, requestLogLevel: _logLevel)
+            using var response = await _requestPolicy.PostAsync(_client, method, content, Logger, false, _logLevel, cancellation)
                                                      .ConfigureAwait(false);
             status = response.StatusCode;
             result = await ReadHttpResponse(response, cancellation).ConfigureAwait(false);
@@ -197,8 +196,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             new KeyValuePair<string?, string?>("client_secret", _clientSecret),
             new KeyValuePair<string?, string?>("code", code)
         });
-        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, cancellation, requestLogLevel: _logLevel)
-                                            .ConfigureAwait(false);
+        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, false, _logLevel, cancellation).ConfigureAwait(false);
         if (!result.IsSuccessStatusCode)
         {
             Logger.LogError("Authorization failed with {Code}", result.StatusCode);
@@ -220,8 +218,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             new KeyValuePair<string?, string?>("client_secret", _clientSecret),
             new KeyValuePair<string?, string?>("refresh_token", refreshToken)
         });
-        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, cancellation, requestLogLevel: _logLevel)
-                                            .ConfigureAwait(false);
+        using var result = await _authPolicy.PostAsync(AuthPath, content, Logger, false, _logLevel, cancellation).ConfigureAwait(false);
         if (!result.IsSuccessStatusCode)
         {
             Logger.LogWarning("Token refresh failed with {Code}", result.StatusCode);

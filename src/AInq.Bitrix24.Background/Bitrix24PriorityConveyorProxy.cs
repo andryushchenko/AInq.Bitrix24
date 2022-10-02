@@ -23,12 +23,12 @@ internal sealed class Bitrix24PriorityConveyorProxy : IBitrix24Client, IBitrix24
 
     internal IPriorityConveyor<(string, JToken?), JToken> Conveyor
     {
-        set => _conveyor ??= value ?? throw new ArgumentNullException();
+        set => _conveyor ??= value ?? throw new ArgumentNullException(nameof(value));
     }
 
     internal string Portal
     {
-        set => _portal ??= value ?? throw new ArgumentNullException();
+        set => _portal ??= value ?? throw new ArgumentNullException(nameof(value));
     }
 
     string IBitrix24Client.Portal => _portal ?? throw new InvalidOperationException();
