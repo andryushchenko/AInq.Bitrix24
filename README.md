@@ -8,6 +8,14 @@
 
 Client for [Bitrix24 Rest API](https://dev.1c-bitrix.ru/rest_help/)
 
+## Project status
+
+Unfortunately, at the moment the development of the project is suspended. In the near future, only bug fixes and minor technical updates will be released. There is a plan to create a new strongly typed API client (primarily CRM and tasks), but there are no specific deadlines due to the workload on the main project.
+
+## Статус проекта
+
+К сожалению, в настоящий момент развитие проекта приостановлено. В ближайшее время будут выходить только исправления ошибок и небольшие технические обновления. Существует план создания нового строго типизированного клиента API (в первую очередь CRM и задач), но никаких конкретных сроков нет по причине загруженности на основном проекте.
+
 ## New in 2.0
 
 Split interface, implementation and high-level method calls (in future) to separate packages
