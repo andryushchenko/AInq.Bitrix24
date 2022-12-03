@@ -6,16 +6,16 @@
     </PropertyGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AInq.Helpers.Linq" />
+        <PackageReference Include="AInq.Optional" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\AInq.Bitrix24.Abstraction\AInq.Bitrix24.Abstraction.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="AInq.Helpers.Linq" Version="2.3.0" />
-        <PackageReference Include="AInq.Optional" Version="3.4.0" />
     </ItemGroup>
 
     <ItemGroup>

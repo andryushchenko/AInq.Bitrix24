@@ -3,7 +3,7 @@
     <Sdk Name="DotNet.ReproducibleBuilds.Isolated" Version="1.1.1" />
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0</TargetFrameworks>
         <Product>AInq.Bitrix24</Product>
         <RootNamespace>AInq.Bitrix24</RootNamespace>
         <Authors>Anton Andryushchenko</Authors>
@@ -11,7 +11,7 @@
         <Copyright>Copyright (c) Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Bitrix24</PackageProjectUrl>
-        <LangVersion>preview</LangVersion>
+        <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -26,17 +26,6 @@
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
         <None Include="..\..\AInq.png" Pack="true" PackagePath="\" />
         <Compile Include="..\Shared\JetBrains.Annotations.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="DotNet.ReproducibleBuilds.Isolated" Version="1.1.1">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>

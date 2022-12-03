@@ -1,0 +1,29 @@
+﻿<Project>
+
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+        <EnablePackageVersionOverride>false</EnablePackageVersionOverride>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
+        <PackageVersion Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageVersion Include="AInq.Background" Version="5.5.1" />
+        <PackageVersion Include="AInq.Helpers.Polly" Version="2.3.1" />
+        <PackageVersion Include="AInq.Helpers.Linq" Version="2.3.1" />
+        <PackageVersion Include="AInq.Optional" Version="3.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <GlobalPackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </GlobalPackageReference>
+        <GlobalPackageReference Include="DotNet.ReproducibleBuilds.Isolated" Version="1.1.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </GlobalPackageReference>
+    </ItemGroup>
+
+</Project>
