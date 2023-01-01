@@ -21,6 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 #nullable disable
+
 using System;
 // ReSharper disable UnusedType.Global
 
@@ -249,8 +250,8 @@ internal sealed class NonNegativeValueAttribute : Attribute { }
 
   /// <summary>
   /// Indicates that the function argument should be a string literal and match
-  /// one of the parameters of the caller function. This annotation is used for paramerers
-  /// like 'string paramName' parameter of the <see cref="System.ArgumentNullException"/> constuctor.
+  /// one of the parameters of the caller function. This annotation is used for parameters
+  /// like 'string paramName' parameter of the <see cref="System.ArgumentNullException"/> constructor.
   /// </summary>
   /// <example><code>
   /// void Foo(string param) {
@@ -912,12 +913,17 @@ internal enum InjectedLanguage
 
   /// <summary>
   /// Indicates that the marked parameter, field, or property is accepting a string literal
-  /// containing code fragment in a language specified by the <see cref="InjectedLanguage"/>.
+  /// containing code fragment in a specified language.
   /// </summary>
   /// <example><code>
   /// void Foo([LanguageInjection(InjectedLanguage.CSS, Prefix = "body{", Suffix = "}")] string cssProps)
   /// {
   ///   // cssProps should only contains a list of CSS properties
+  /// }
+  /// </code></example>
+  /// <example><code>
+  /// void Bar([LanguageInjection("json")] string json)
+  /// {
   /// }
   /// </code></example>
   [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
@@ -928,13 +934,21 @@ internal sealed class LanguageInjectionAttribute : Attribute
       InjectedLanguage = injectedLanguage;
     }
 
-    /// <summary>Specify a language of injected code fragment.</summary>
+    public LanguageInjectionAttribute([NotNull] string injectedLanguage)
+    {
+      InjectedLanguageName = injectedLanguage;
+    }
+
+    /// <summary>Specifies a language of injected code fragment.</summary>
     public InjectedLanguage InjectedLanguage { get; }
 
-    /// <summary>Specify a string that "precedes" injected string literal.</summary>
+    /// <summary>Specifies a language name of injected code fragment.</summary>
+    [CanBeNull] public string InjectedLanguageName { get; }
+
+    /// <summary>Specifies a string that "precedes" injected string literal.</summary>
     [CanBeNull] public string Prefix { get; set; }
 
-    /// <summary>Specify a string that "follows" injected string literal.</summary>
+    /// <summary>Specifies a string that "follows" injected string literal.</summary>
     [CanBeNull] public string Suffix { get; set; }
   }
 
@@ -1534,6 +1548,12 @@ internal sealed class AspMinimalApiDeclarationAttribute : Attribute
   {
     public string HttpVerb { get; set; }
   }
+
+  /// <summary>
+  /// Indicates that the marked method declares ASP.NET Minimal API endpoints group
+  /// </summary>
+  [AttributeUsage(AttributeTargets.Method)]
+internal sealed class AspMinimalApiGroupAttribute : Attribute { }
 
   /// <summary>
   /// Indicates that the marked parameter contains ASP.NET Minimal API endpoint handler
