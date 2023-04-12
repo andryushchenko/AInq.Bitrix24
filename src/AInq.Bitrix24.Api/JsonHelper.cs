@@ -20,7 +20,7 @@ public static class JsonHelper
     /// <summary> Try get <see cref="float" /> value </summary>
     /// <param name="token"> JSON source </param>
     [PublicAPI]
-    public static Maybe<float> TryGetFloat(this JToken token)
+    public static Maybe<float> TryGetFloat(this JToken? token)
         => token?.Type switch
         {
             JTokenType.Float or JTokenType.Integer => token.Value<float>(),
@@ -34,13 +34,13 @@ public static class JsonHelper
     /// <param name="token"> JSON source </param>
     /// <param name="paramName"> Property name </param>
     [PublicAPI]
-    public static Maybe<float> TryGetFloat(this JToken token, string paramName)
-        => token[paramName]?.TryGetFloat() ?? Maybe.None<float>();
+    public static Maybe<float> TryGetFloat(this JToken? token, string paramName)
+        => (token?[paramName]).TryGetFloat();
 
     /// <summary> Try get <see cref="int" /> value </summary>
     /// <param name="token"> JSON source </param>
     [PublicAPI]
-    public static Maybe<int> TryGetInt(this JToken token)
+    public static Maybe<int> TryGetInt(this JToken? token)
         => token?.Type switch
         {
             JTokenType.Integer => token.Value<int>(),
@@ -54,13 +54,13 @@ public static class JsonHelper
     /// <param name="token"> JSON source </param>
     /// <param name="paramName"> Property name </param>
     [PublicAPI]
-    public static Maybe<int> TryGetInt(this JToken token, string paramName)
-        => token[paramName]?.TryGetInt() ?? Maybe.None<int>();
+    public static Maybe<int> TryGetInt(this JToken? token, string paramName)
+        => (token?[paramName]).TryGetInt();
 
     /// <summary> Try get <see cref="long" /> value </summary>
     /// <param name="token"> JSON source </param>
     [PublicAPI]
-    public static Maybe<long> TryGetLong(this JToken token)
+    public static Maybe<long> TryGetLong(this JToken? token)
         => token?.Type switch
         {
             JTokenType.Integer => token.Value<long>(),
@@ -74,14 +74,14 @@ public static class JsonHelper
     /// <param name="token"> JSON source </param>
     /// <param name="paramName"> Property name </param>
     [PublicAPI]
-    public static Maybe<long> TryGetLong(this JToken token, string paramName)
-        => token[paramName]?.TryGetLong() ?? Maybe.None<long>();
+    public static Maybe<long> TryGetLong(this JToken? token, string paramName)
+        => (token?[paramName]).TryGetLong();
 
     /// <summary> Try get <see cref="int" /> values array </summary>
     /// <param name="token"> JSON source </param>
     /// <param name="ignoreTypeMismatch"> Skip values that can't be parsed, otherwise return empty array </param>
     [PublicAPI]
-    public static int[] TryGetIntArray(this JToken token, bool ignoreTypeMismatch = true)
+    public static int[] TryGetIntArray(this JToken? token, bool ignoreTypeMismatch = true)
         => token?.Type switch
         {
             JTokenType.Array => !ignoreTypeMismatch
@@ -101,22 +101,30 @@ public static class JsonHelper
     /// <param name="paramName"> Property name </param>
     /// <param name="ignoreTypeMismatch"> Skip values that can't be parsed, otherwise return empty array </param>
     [PublicAPI]
-    public static int[] TryGetIntArray(this JToken token, string paramName, bool ignoreTypeMismatch = true)
-        => token[paramName]?.TryGetIntArray(ignoreTypeMismatch) ?? Array.Empty<int>();
+    public static int[] TryGetIntArray(this JToken? token, string paramName, bool ignoreTypeMismatch = true)
+        => (token?[paramName]).TryGetIntArray(ignoreTypeMismatch);
 
     /// <summary> Try get <see cref="bool" /> value </summary>
     /// <param name="token"> JSON source </param>
     [PublicAPI]
-    public static Maybe<bool> TryGetBool(this JToken token)
+    public static Maybe<bool> TryGetBool(this JToken? token)
         => token?.Type switch
         {
             JTokenType.Boolean => token.Value<bool>(),
-            JTokenType.Integer or JTokenType.Float => token.Value<float>() > 0,
+            JTokenType.Integer => token.Value<int>() switch
+            {
+                0 => false,
+                1 => true,
+                _ => Maybe.None<bool>()
+            },
             JTokenType.String => bool.TryParse(token.Value<string>(), out var boolResult)
                 ? boolResult
-                : float.TryParse(token.Value<string>(), out var floatResult)
-                    ? floatResult > 0
-                    : string.Equals(token.Value<string>(), "Y", StringComparison.InvariantCultureIgnoreCase),
+                : token.Value<string>()?.ToUpperInvariant().Trim() switch
+                {
+                    "Y" or "1" => true,
+                    "N" or "0" => false,
+                    _ => Maybe.None<bool>()
+                },
             _ => Maybe.None<bool>()
         };
 
@@ -124,30 +132,30 @@ public static class JsonHelper
     /// <param name="token"> JSON source </param>
     /// <param name="paramName"> Property name </param>
     [PublicAPI]
-    public static Maybe<bool> TryGetBool(this JToken token, string paramName)
-        => token[paramName]?.TryGetBool() ?? Maybe.None<bool>();
+    public static Maybe<bool> TryGetBool(this JToken? token, string paramName)
+        => (token?[paramName]).TryGetBool();
 
     /// <summary> Try get <see cref="bool" /> value </summary>
     /// <param name="token"> JSON source </param>
     [PublicAPI]
-    public static bool GetBoolOrFalse(this JToken token)
+    public static bool GetBoolOrFalse(this JToken? token)
         => token.TryGetBool().ValueOrDefault(false);
 
     /// <summary> Try get <see cref="bool" /> value </summary>
     /// <param name="token"> JSON source </param>
     /// <param name="paramName"> Property name </param>
     [PublicAPI]
-    public static bool GetBoolOrFalse(this JToken token, string paramName)
-        => token[paramName]?.GetBoolOrFalse() ?? false;
+    public static bool GetBoolOrFalse(this JToken? token, string paramName)
+        => (token?[paramName]).GetBoolOrFalse();
 
     /// <summary> Try get <see cref="DateTime" /> value </summary>
     /// <param name="token"> JSON source </param>
     [PublicAPI]
-    public static Maybe<DateTime> TryGetDateTime(this JToken token)
+    public static Maybe<DateTime> TryGetDateTime(this JToken? token)
     {
         try
         {
-            return token.Value<DateTime>();
+            return (token?.Value<DateTime?>()).AsMaybeIfNotNull();
         }
         catch (Exception)
         {
@@ -159,6 +167,6 @@ public static class JsonHelper
     /// <param name="token"> JSON source </param>
     /// <param name="paramName"> Property name </param>
     [PublicAPI]
-    public static Maybe<DateTime> TryGetDateTime(this JToken token, string paramName)
-        => token[paramName]?.TryGetDateTime() ?? Maybe.None<DateTime>();
+    public static Maybe<DateTime> TryGetDateTime(this JToken? token, string paramName)
+        => (token?[paramName]).TryGetDateTime();
 }
