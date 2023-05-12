@@ -19,12 +19,3 @@ jobs:
       run: dotnet nuget push *.nupkg -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-    - name: GPR setup
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '7.0.x'
-        source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-      env:
-        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-    - name: Push to GPR
-      run: dotnet nuget push *.nupkg
