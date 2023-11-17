@@ -8,11 +8,11 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: .NET setup
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '7.0.x'
+        dotnet-version: '8.0.x'
     - name: Pack
       run: dotnet pack -o . -c Release /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="${{ github.event.release.body }}"
     - name: Push to Nuget

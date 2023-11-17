@@ -42,8 +42,12 @@ public class Bitrix24CallException : Exception
     public Bitrix24CallException(string method, string message, Exception innerException) : base(message, innerException)
         => Method = method;
 
+#if !NET8_0_OR_GREATER
+
     /// <inheritdoc />
     protected Bitrix24CallException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+
+#endif
 
     /// <summary> REST API method name </summary>
     [PublicAPI]
