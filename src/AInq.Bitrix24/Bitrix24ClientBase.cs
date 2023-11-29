@@ -114,7 +114,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             status = response.StatusCode;
             result = await ReadHttpResponse(response, cancellation).ConfigureAwait(false);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
             Logger.LogError(ex, "Request failed");
             throw new Bitrix24CallException(method, ex);
@@ -153,7 +153,7 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
             status = response.StatusCode;
             result = await ReadHttpResponse(response, cancellation).ConfigureAwait(false);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
             Logger.LogError(ex, "Request failed");
             throw new Bitrix24CallException(method, ex);
