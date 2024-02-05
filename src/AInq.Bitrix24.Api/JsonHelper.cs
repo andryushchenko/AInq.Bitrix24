@@ -1,4 +1,4 @@
-﻿// Copyright 2021-2023 Anton Andryushchenko
+﻿// Copyright 2021-2024 Anton Andryushchenko
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Globalization;
+
 namespace AInq.Bitrix24;
 
 /// <summary> JSON data reading methods to handle some strange Bitrix24 behaviour </summary>
@@ -24,7 +26,13 @@ public static class JsonHelper
         => token?.Type switch
         {
             JTokenType.Float or JTokenType.Integer => token.Value<float>(),
-            JTokenType.String => float.TryParse(token.Value<string>(), out var result)
+#if NET7_0_OR_GREATER
+            JTokenType.String => float.TryParse(token.Value<string>(), CultureInfo.InvariantCulture, out var result)
+                                 || float.TryParse(token.Value<string>(), out result)
+#else
+            JTokenType.String => float.TryParse(token.Value<string>(), NumberStyles.Float, CultureInfo.InvariantCulture, out var result)
+                                 || float.TryParse(token.Value<string>(), out result)
+#endif
                 ? result
                 : Maybe.None<float>(),
             _ => Maybe.None<float>()
