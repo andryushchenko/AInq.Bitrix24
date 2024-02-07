@@ -1,4 +1,4 @@
-﻿// Copyright 2021-2023 Anton Andryushchenko
+﻿// Copyright 2021 Anton Andryushchenko
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,8 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-using System.Runtime.Serialization;
 
 namespace AInq.Bitrix24;
 
@@ -43,7 +41,6 @@ public class Bitrix24CallException : Exception
         => Method = method;
 
 #if !NET8_0_OR_GREATER
-
     /// <inheritdoc />
     protected Bitrix24CallException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
