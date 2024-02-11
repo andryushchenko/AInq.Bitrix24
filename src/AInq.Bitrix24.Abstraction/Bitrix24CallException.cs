@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !NET8_0_OR_GREATER
+using System.Runtime.Serialization;
+#endif
+
 namespace AInq.Bitrix24;
 
 /// <summary> Bitrix24 REST API call exception </summary>
