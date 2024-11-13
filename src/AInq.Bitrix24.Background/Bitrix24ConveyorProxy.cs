@@ -34,8 +34,10 @@ internal sealed class Bitrix24ConveyorProxy : IBitrix24Client
     string IBitrix24Client.Portal => _portal ?? throw new InvalidOperationException();
 
     async Task<JToken> IBitrix24Client.GetAsync(string method, CancellationToken cancellation)
-        => await (_conveyor?.ProcessDataAsync((method, null), cancellation) ?? throw new InvalidOperationException()).ConfigureAwait(false);
+        => await (_conveyor?.ProcessDataAsync((method, null), cancellation: cancellation) ?? throw new InvalidOperationException())
+            .ConfigureAwait(false);
 
     async Task<JToken> IBitrix24Client.PostAsync(string method, JToken data, CancellationToken cancellation)
-        => await (_conveyor?.ProcessDataAsync((method, data), cancellation) ?? throw new InvalidOperationException()).ConfigureAwait(false);
+        => await (_conveyor?.ProcessDataAsync((method, data), cancellation: cancellation) ?? throw new InvalidOperationException())
+            .ConfigureAwait(false);
 }
