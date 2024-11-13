@@ -14,6 +14,8 @@
         <PackageVersion Include="AInq.Helpers.Linq" Version="2.4.0" />
         <PackageVersion Include="AInq.Optional" Version="3.7.0" />
         <PackageVersion Include="Polly" Version="8.5.0" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>
