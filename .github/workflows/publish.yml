@@ -12,7 +12,7 @@ jobs:
     - name: .NET setup
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '9.0.x'
     - name: Pack
       run: dotnet pack -o . -c Release /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="${{ github.event.release.body }}"
     - name: Push to Nuget
