@@ -9,10 +9,10 @@
     <ItemGroup>
         <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
         <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageVersion Include="AInq.Background" Version="5.8.1" />
-        <PackageVersion Include="AInq.Helpers.Polly" Version="2.5.0" />
-        <PackageVersion Include="AInq.Helpers.Linq" Version="2.5.0" />
-        <PackageVersion Include="AInq.Optional" Version="3.8.0" />
+        <PackageVersion Include="AInq.Background" Version="5.8.2" />
+        <PackageVersion Include="AInq.Helpers.Polly" Version="2.5.1" />
+        <PackageVersion Include="AInq.Helpers.Linq" Version="2.5.1" />
+        <PackageVersion Include="AInq.Optional" Version="3.8.1" />
     </ItemGroup>
 
     <ItemGroup>
