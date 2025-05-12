@@ -94,14 +94,14 @@ public static class JsonHelper
         {
             JTokenType.Array => !ignoreTypeMismatch
                                 && token.Any(item => item.Type is not (JTokenType.Integer or JTokenType.Float or JTokenType.String))
-                ? Array.Empty<int>()
+                ? []
                 : token.Select(item => item.TryGetInt()).Values().ToArray(),
-            JTokenType.Integer => new[] {token.Value<int>()},
+            JTokenType.Integer => [token.Value<int>()],
             JTokenType.String => int.TryParse(token.Value<string>(), out var result)
                 ? new[] {result}
                 : Array.Empty<int>(),
-            JTokenType.Float => new[] {(int) token.Value<float>()},
-            _ => Array.Empty<int>()
+            JTokenType.Float => [(int) token.Value<float>()],
+            _ => []
         };
 
     /// <summary> Try get <see cref="int" /> values array </summary>
