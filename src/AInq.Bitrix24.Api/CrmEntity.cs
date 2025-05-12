@@ -101,8 +101,8 @@ public class CrmEntity
             var result = await Client.GetAsync($"crm.{Type}.get?id={id}", cancellation).ConfigureAwait(false);
             return result[ResultField] switch
             {
-                JObject deal => deal,
-                JArray {Count: > 0} array => array.First!,
+                JObject item => item.DeepClone(),
+                JArray {Count: > 0} array => array.First!.DeepClone(),
                 _ => Maybe.None<JToken>()
             };
         }
