@@ -8,10 +8,10 @@
 
     <ItemGroup>
         <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageVersion Include="AInq.Background" Version="5.8.9" />
-        <PackageVersion Include="AInq.Helpers.Polly" Version="2.5.7" />
-        <PackageVersion Include="AInq.Helpers.Linq" Version="2.5.7" />
-        <PackageVersion Include="AInq.Optional" Version="3.8.7" />
+        <PackageVersion Include="AInq.Background" Version="5.8.10" />
+        <PackageVersion Include="AInq.Helpers.Polly" Version="2.5.8" />
+        <PackageVersion Include="AInq.Helpers.Linq" Version="2.5.8" />
+        <PackageVersion Include="AInq.Optional" Version="3.8.8" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'=='net6.0'">
@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'!='net6.0'">
-        <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.8" />
+        <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.9" />
     </ItemGroup>
 
     <ItemGroup>
