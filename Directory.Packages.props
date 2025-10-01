@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <GlobalPackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.25" PrivateAssets="All" />
+        <GlobalPackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.39" PrivateAssets="All" />
     </ItemGroup>
 
 </Project>
