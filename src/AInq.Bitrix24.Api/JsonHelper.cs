@@ -26,11 +26,11 @@ public static class JsonHelper
         => token?.Type switch
         {
             JTokenType.Float or JTokenType.Integer => token.Value<float>(),
-#if NET7_0_OR_GREATER
-            JTokenType.String => float.TryParse(token.Value<string>(), CultureInfo.InvariantCulture, out var result)
+#if NETSTANDARD
+            JTokenType.String => float.TryParse(token.Value<string>(), NumberStyles.Float, CultureInfo.InvariantCulture, out var result)
                                  || float.TryParse(token.Value<string>(), out result)
 #else
-            JTokenType.String => float.TryParse(token.Value<string>(), NumberStyles.Float, CultureInfo.InvariantCulture, out var result)
+            JTokenType.String => float.TryParse(token.Value<string>(), CultureInfo.InvariantCulture, out var result)
                                  || float.TryParse(token.Value<string>(), out result)
 #endif
                 ? result

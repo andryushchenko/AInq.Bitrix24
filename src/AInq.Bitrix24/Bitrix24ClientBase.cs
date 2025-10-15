@@ -251,10 +251,10 @@ public abstract class Bitrix24ClientBase : IBitrix24Client, IDisposable
     }
 
     private static async ValueTask<string> ReadHttpResponse(HttpResponseMessage response, CancellationToken cancellation)
-#if NET5_0_OR_GREATER
-        => await response.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false);
-#else
+#if NETSTANDARD
         => await response.Content.ReadAsStringAsync().WaitAsync(cancellation).ConfigureAwait(false);
+#else
+        => await response.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false);
 #endif
 
     /// <summary> Obtain OAuth Authorization Code </summary>

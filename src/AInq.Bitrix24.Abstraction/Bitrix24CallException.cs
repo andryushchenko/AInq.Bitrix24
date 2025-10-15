@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !NET8_0_OR_GREATER
+#if NETSTANDARD
 using System.Runtime.Serialization;
 #endif
 
@@ -44,7 +44,7 @@ public class Bitrix24CallException : Exception
     public Bitrix24CallException(string method, string message, Exception innerException) : base(message, innerException)
         => Method = method;
 
-#if !NET8_0_OR_GREATER
+#if NETSTANDARD
     /// <inheritdoc />
     protected Bitrix24CallException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
