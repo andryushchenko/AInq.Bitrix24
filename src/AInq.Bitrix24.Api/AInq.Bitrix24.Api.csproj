@@ -5,13 +5,10 @@
         <Description>Bitrix24 Rest API implementation</Description>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
-    </ItemGroup>
-
     <ItemGroup>
         <PackageReference Include="AInq.Helpers.Linq" />
         <PackageReference Include="AInq.Optional" />
+        <PackageReference Condition="'$(TargetFramework)'=='netstandard2.0'" Include="Microsoft.Bcl.AsyncInterfaces" />
     </ItemGroup>
 
     <ItemGroup>
