@@ -1,20 +1,20 @@
 <Solution>
-  
+
     <Folder Name="/Packages/">
-        <Project Path="src/AInq.Bitrix24.Abstraction/AInq.Bitrix24.Abstraction.csproj"/>
-        <Project Path="src/AInq.Bitrix24.Api/AInq.Bitrix24.Api.csproj"/>
-        <Project Path="src/AInq.Bitrix24.Background/AInq.Bitrix24.Background.csproj"/>
-        <Project Path="src/AInq.Bitrix24/AInq.Bitrix24.csproj"/>
+        <Project Path="src/AInq.Bitrix24.Abstraction/AInq.Bitrix24.Abstraction.csproj" />
+        <Project Path="src/AInq.Bitrix24.Api/AInq.Bitrix24.Api.csproj" />
+        <Project Path="src/AInq.Bitrix24.Background/AInq.Bitrix24.Background.csproj" />
+        <Project Path="src/AInq.Bitrix24/AInq.Bitrix24.csproj" />
     </Folder>
-  
+
     <Folder Name="/Solution Items/">
-        <File Path="AInq.png"/>
-        <File Path="Directory.Build.props"/>
-        <File Path="Directory.Packages.props"/>
-        <File Path="LICENSE"/>
-        <File Path="nuget.config"/>
-        <File Path="README.md"/>
-        <File Path="src/Shared/JetBrains.Annotations.cs"/>
+        <File Path="AInq.png" />
+        <File Path="Directory.Build.props" />
+        <File Path="Directory.Packages.props" />
+        <File Path="LICENSE" />
+        <File Path="nuget.config" />
+        <File Path="README.md" />
+        <File Path="src/Shared/JetBrains.Annotations.cs" />
     </Folder>
-  
+
 </Solution>
