@@ -8,14 +8,14 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
-    - name: .NET setup
-      uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: '10.0.x'
-    - name: Pack
-      run: dotnet pack -o . -c Release /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="${{ github.event.release.body }}"
-    - name: Push to Nuget
-      run: dotnet nuget push *.nupkg -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
-      env:
-        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      - uses: actions/checkout@v5
+      - name: .NET setup
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - name: Pack
+        run: dotnet pack -o . -c Release /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="${{ github.event.release.body }}"
+      - name: Push to Nuget
+        run: dotnet nuget push *.nupkg -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

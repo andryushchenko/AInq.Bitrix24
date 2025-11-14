@@ -11,7 +11,7 @@
         <PackageVersion Include="AInq.Background" Version="5.9.0" />
         <PackageVersion Include="AInq.Helpers.Polly" Version="2.6.0" />
         <PackageVersion Include="AInq.Helpers.Linq" Version="2.6.0" />
-        <PackageVersion Include="AInq.Optional" Version="3.9.0" />
+        <PackageVersion Include="AInq.Optional" Version="3.9.1" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
