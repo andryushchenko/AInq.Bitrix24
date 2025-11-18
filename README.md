@@ -6,7 +6,7 @@
 
 ## What is it?
 
-Client for [Bitrix24 Rest API](https://dev.1c-bitrix.ru/rest_help/)
+Client for [Bitrix24 Rest API](https://apidocs.bitrix24.ru/)
 
 ## Project status
 
