@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Helpers.Polly;
-using Microsoft.Extensions.Logging.Abstractions;
-using Polly;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using AInq.Helpers.Polly;
+using Microsoft.Extensions.Logging.Abstractions;
+using Polly;
 
 namespace AInq.Bitrix24;
 

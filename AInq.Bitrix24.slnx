@@ -8,6 +8,7 @@
     </Folder>
 
     <Folder Name="/Solution Items/">
+        <File Path=".editorconfig" />
         <File Path="AInq.png" />
         <File Path="Directory.Build.props" />
         <File Path="Directory.Packages.props" />
@@ -15,7 +16,6 @@
         <File Path="LICENSE" />
         <File Path="nuget.config" />
         <File Path="README.md" />
-        <File Path="src/Shared/JetBrains.Annotations.cs" />
     </Folder>
 
 </Solution>

@@ -19,16 +19,12 @@ internal static class TaskHelper
 {
     public static Task<T> WaitAsync<T>(this Task<T> task, CancellationToken cancellation)
         => cancellation.CanBeCanceled && !task.IsCompleted
-            ? cancellation.IsCancellationRequested
-                ? Task.FromCanceled<T>(cancellation)
-                : WaitWithCancellationAsync(task, cancellation)
+            ? cancellation.IsCancellationRequested ? Task.FromCanceled<T>(cancellation) : WaitWithCancellationAsync(task, cancellation)
             : task;
 
     public static Task WaitAsync(this Task task, CancellationToken cancellation)
         => cancellation.CanBeCanceled && !task.IsCompleted
-            ? cancellation.IsCancellationRequested
-                ? Task.FromCanceled(cancellation)
-                : WaitWithCancellationAsync(task, cancellation)
+            ? cancellation.IsCancellationRequested ? Task.FromCanceled(cancellation) : WaitWithCancellationAsync(task, cancellation)
             : task;
 
     private static async Task<T> WaitWithCancellationAsync<T>(Task<T> task, CancellationToken cancellation)

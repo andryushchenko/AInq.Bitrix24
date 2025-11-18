@@ -108,8 +108,8 @@ public class CrmEntity
                 _ => Maybe.None<JToken>()
             };
         }
-        catch (Bitrix24CallException ex)
-            when (ex.Data.Contains("Status") && ex.Data["Status"] is HttpStatusCode.BadRequest or HttpStatusCode.NotFound)
+        catch (Bitrix24CallException ex) when
+            (ex.Data.Contains("Status") && ex.Data["Status"] is HttpStatusCode.BadRequest or HttpStatusCode.NotFound)
         {
             return Maybe.None<JToken>();
         }
@@ -191,8 +191,7 @@ public class CrmEntity
                                       {ParamsArgument, registerSonetEvent ? EventTrue : EventFalse}
                                   },
                                   cancellation)
-                              .ConfigureAwait(false))
-            .TryGetInt(ResultField);
+                              .ConfigureAwait(false)).TryGetInt(ResultField);
         return id.HasValue ? id.Value : throw new Bitrix24CallException($"crm.{Type}.add", "Element add failed");
     }
 

@@ -52,9 +52,7 @@ public static class JsonHelper
         => token?.Type switch
         {
             JTokenType.Integer => token.Value<int>(),
-            JTokenType.String => int.TryParse(token.Value<string>(), out var result)
-                ? result
-                : Maybe.None<int>(),
+            JTokenType.String => int.TryParse(token.Value<string>(), out var result) ? result : Maybe.None<int>(),
             _ => Maybe.None<int>()
         };
 
@@ -72,9 +70,7 @@ public static class JsonHelper
         => token?.Type switch
         {
             JTokenType.Integer => token.Value<long>(),
-            JTokenType.String => long.TryParse(token.Value<string>(), out var result)
-                ? result
-                : Maybe.None<long>(),
+            JTokenType.String => long.TryParse(token.Value<string>(), out var result) ? result : Maybe.None<long>(),
             _ => Maybe.None<long>()
         };
 
@@ -97,9 +93,7 @@ public static class JsonHelper
                 ? []
                 : token.Select(item => item.TryGetInt()).Values().ToArray(),
             JTokenType.Integer => [token.Value<int>()],
-            JTokenType.String => int.TryParse(token.Value<string>(), out var result)
-                ? new[] {result}
-                : Array.Empty<int>(),
+            JTokenType.String => int.TryParse(token.Value<string>(), out var result) ? new[] {result} : Array.Empty<int>(),
             JTokenType.Float => [(int) token.Value<float>()],
             _ => []
         };
