@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Helpers.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
+#if NETSTANDARD
+using AInq.Helpers.Linq;
+#endif
 
 namespace AInq.Bitrix24;
 
@@ -89,7 +91,7 @@ public class CrmEntity
                  .Prepend("*")
                  .ToArray();
 
-    /// <summary> Get entity by Id </summary>
+    /// <summary> Get entity by ID </summary>
     /// <param name="id"> Id </param>
     /// <param name="cancellation"> Cancellation token </param>
     [PublicAPI]
@@ -113,14 +115,18 @@ public class CrmEntity
         }
     }
 
-    /// <summary> Get entities by Id </summary>
-    /// <param name="ids"> Id collection </param>
+    /// <summary> Get entities by ID </summary>
+    /// <param name="ids"> ID collection </param>
     /// <param name="cancellation"> Cancellation token </param>
     [PublicAPI]
     public async IAsyncEnumerable<JToken> GetAsync(IEnumerable<int> ids, [EnumeratorCancellation] CancellationToken cancellation = default)
     {
         _ = ids ?? throw new ArgumentNullException(nameof(ids));
+#if NETSTANDARD
         foreach (var batch in ids.Where(id => id > 0).Batch(50))
+#else
+        foreach (var batch in ids.Where(id => id > 0).Chunk(50))
+#endif
         {
             var request = new JObject
             {
@@ -136,7 +142,7 @@ public class CrmEntity
     }
 
     /// <summary> Update entity </summary>
-    /// <param name="id"> Entity Id </param>
+    /// <param name="id"> Entity ID </param>
     /// <param name="fields"> Fields data </param>
     /// <param name="registerSonetEvent"> Register update event </param>
     /// <param name="cancellation"> Cancellation token </param>
@@ -158,7 +164,7 @@ public class CrmEntity
     }
 
     /// <summary> Delete entity </summary>
-    /// <param name="id"> Entity Id </param>
+    /// <param name="id"> Entity ID </param>
     /// <param name="cancellation"> Cancellation token </param>
     [PublicAPI]
     public async Task<bool> DeleteAsync(int id, CancellationToken cancellation = default)
@@ -174,7 +180,7 @@ public class CrmEntity
     /// <param name="fields"> Fields data </param>
     /// <param name="registerSonetEvent"> Register update event </param>
     /// <param name="cancellation"> Cancellation token </param>
-    /// <returns> New entity Id </returns>
+    /// <returns> New entity ID </returns>
     [PublicAPI]
     public async Task<int> AddAsync(JObject fields, bool registerSonetEvent = false, CancellationToken cancellation = default)
     {
