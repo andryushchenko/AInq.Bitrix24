@@ -14,9 +14,6 @@
 
 using System.Net;
 using System.Runtime.CompilerServices;
-#if NETSTANDARD
-using AInq.Helpers.Linq;
-#endif
 
 namespace AInq.Bitrix24;
 
@@ -122,11 +119,7 @@ public class CrmEntity
     public async IAsyncEnumerable<JToken> GetAsync(IEnumerable<int> ids, [EnumeratorCancellation] CancellationToken cancellation = default)
     {
         _ = ids ?? throw new ArgumentNullException(nameof(ids));
-#if NETSTANDARD
-        foreach (var batch in ids.Where(id => id > 0).Batch(50))
-#else
         foreach (var batch in ids.Where(id => id > 0).Chunk(50))
-#endif
         {
             var request = new JObject
             {
