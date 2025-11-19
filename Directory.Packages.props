@@ -8,9 +8,9 @@
 
     <ItemGroup>
         <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
-        <PackageVersion Include="AInq.Background" Version="5.9.0" />
+        <PackageVersion Include="AInq.Background" Version="5.9.1" />
         <PackageVersion Include="AInq.Helpers.Polly" Version="2.6.0" />
-        <PackageVersion Include="AInq.Optional" Version="3.9.1" />
+        <PackageVersion Include="AInq.Optional" Version="4.0.0" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
