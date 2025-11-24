@@ -7,7 +7,6 @@
 
     <ItemGroup>
         <PackageReference Include="AInq.Helpers.Polly" />
-        <PackageReference Condition="'$(TargetFramework)'=='netstandard2.0'" Include="Microsoft.Bcl.AsyncInterfaces" />
     </ItemGroup>
 
     <ItemGroup>
