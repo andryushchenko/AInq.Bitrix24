@@ -7,6 +7,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-slim
+    permissions:
+      id-token: write 
     steps:
       - uses: actions/checkout@v7
       - name: .NET setup
@@ -14,8 +16,11 @@ jobs:
         with:
           global-json-file: global.json
       - name: Pack
-        run: dotnet pack -o . -c Release /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="${{ github.event.release.body }}"
+        run: dotnet pack -o . -c Release /p:Version=${{github.event.release.tag_name}} /p:PackageReleaseNotes="${{github.event.release.body}}"
+      - name: NuGet login
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{secrets.NUGET_USER}}
       - name: Push to Nuget
-        run: dotnet nuget push *.nupkg -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push *.nupkg -k ${{steps.login.outputs.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
